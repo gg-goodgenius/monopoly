@@ -65,6 +65,7 @@
 	font-size: 90px;
 	font-weight: 400;
 	letter-spacing: 12px;
+	transform: rotate(-45deg);
   }
   
   .community-chest-deck {
@@ -163,7 +164,7 @@
 	padding-right: 15px;
   }
   .space .price {
-	font-size: 7px;
+	font-size: 12px;
 	font-weight: 400;
 	padding-bottom: 5px;
   }
