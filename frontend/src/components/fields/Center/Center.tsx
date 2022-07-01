@@ -6,7 +6,7 @@ function CenterField() {
 				<h2 className="label">Community Chest</h2>
 				<div className="deck"></div>
 			</div>
-			<h1 className="title"><div className="drawing fa fa-diamond"></div>MONOPOLY<div className="drawing fa fa-diamond"></div></h1>
+			<h1 className="title"><div className="drawing fa fa-diamond"></div>TONOPOLY<div className="drawing fa fa-diamond"></div></h1>
 			<div className="chance-deck">
 				<h2 className="label">Chance</h2>
 				<div className="deck"></div>
