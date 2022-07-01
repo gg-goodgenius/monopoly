@@ -34,7 +34,7 @@ function BoardField(props: boardFieldType) {
             <div className="container">
                 <div className={"color-bar "+props.color}></div>
                 <div className="name">{props.name}</div>
-                <div className="price">PRICE {props.price} TON</div>
+                <div className="price">{props.price} TON</div>
             </div>
         </div>
     )
