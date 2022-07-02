@@ -6,7 +6,7 @@ import QRCode from "react-qr-code";
 import HyperModal from 'react-hyper-modal';
 
 function ActionPanel(props: any) {
-    const { profile } = useContext<any>(StateContext)
+    const { profile, socket } = useContext<any>(StateContext)
     const [visibleQRLink, setVisibleQRLink] = useState(false)
     const [join, setJoin] = useState(false)
 
@@ -15,19 +15,20 @@ function ActionPanel(props: any) {
     }
 
     const handleJoin = () => {
+        socket.emit("joinGame")        
         setJoin(true)
     }
 
     const handleStart = () => {
-        
+        socket.emit("startGame")
     }
 
     const handleRollCubes = () => {
-        
+        socket.emit("doActionStep", "rollCubes")
     }
 
     const handleFinish = () => {
-        
+        socket.emit("finishStep")
     }
 
     return (
@@ -43,7 +44,7 @@ function ActionPanel(props: any) {
                 <><Button name='Join Game' onClick={handleJoin} /><br/></>
             }
             <Button name='Roll cubes' onClick={handleRollCubes} /><br/>
-            <Button name='Finish' onClick={handleAddBalance} /><br/>
+            <Button name='Finish' onClick={handleFinish} /><br/>
 
             {visibleQRLink && profile &&
                 <HyperModal

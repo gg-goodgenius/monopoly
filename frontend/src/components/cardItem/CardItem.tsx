@@ -9,6 +9,25 @@ function CardItem(props: any) {
         level = 'No builds'
     } else level = props.level + ' house'
 
+    const handleBuild = () => {
+        // send request to back
+        // send ton in channel for bank
+    }
+
+    const handleSell = () => {
+        // send request to back
+        // wait ton from bank
+    }
+
+    const handleMortage = () => {
+        // send request to back
+        // wait ton from bank
+    }
+
+    const handleOffer = () => {
+        // send request to back
+    }
+
     return (
         <div className="cardItem">
             <div className="name">
@@ -17,10 +36,10 @@ function CardItem(props: any) {
             </div>
             <div>Building: {level}</div>
             <div> 
-            <MiniButton name='Build'/>
-            <MiniButton name='Sell'/>
-            <MiniButton name='Mortgage'/>
-            <MiniButton name='Offer'/>
+            <MiniButton name='Build' onClick={handleBuild}/>
+            <MiniButton name='Sell' onClick={handleSell}/>
+            <MiniButton name='Mortgage' disabled={true} onClick={handleMortage}/>
+            <MiniButton name='Offer' onClick={handleOffer}/>
             </div>
         </div>
     )

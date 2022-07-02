@@ -3,6 +3,12 @@ import './GamerItem.css'
 
 function GamerItem(props: any) {
     const is_active: string = props.active ? "active " : ""
+
+    const handleBuy = () => {
+        // send requests for back
+        // send ton to bank
+    }
+
     return (
         <div key={props.name}>
             <div className={is_active + "gamerItem"} >
@@ -16,7 +22,7 @@ function GamerItem(props: any) {
                             return <div key={offer.name}><div>
                                 {offer.name} - {offer.price} TON
                             </div>
-                                <MiniButton name='Buy' />
+                                <MiniButton name='Buy' onClick={handleBuy}/>
                             </div>
                         })
                     }
