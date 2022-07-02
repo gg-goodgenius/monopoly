@@ -4,7 +4,7 @@ function WalletInfo(props: any) {
     return (
         <div className="panel">
                <div className="header">
-                User info
+                Wallet ifno
                </div>
                <div>
                 Address: {props.address}
