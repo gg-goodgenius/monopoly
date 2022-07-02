@@ -8,7 +8,7 @@ export interface ServerToClientEvents {
 
 export interface ClientToServerEvents {
     getCurrentOnline: () => void,
-    joinGame: (address: string) => void,
+    joinGame: () => void,
     startGame: () => void,
     startStep: () => void,
     doActionStep: () => void,

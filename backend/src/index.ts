@@ -36,21 +36,26 @@ let step: Step | null = null;
 let countOnline = 0;
 
 io.on('connection', async (socket) => {
+    const address = socket.handshake.query.address as string;
+    if(!address)
+        return socket.disconnect(true);
+
     countOnline += 1;
+
+    if(game.status === StatusGame.PROCESS) {
+        const i = game.users.findIndex(u => u.address === address);
+        if(i > -1) {
+            game.users[i].socketId = socket.id;
+        }
+    }
+
     socket.broadcast.emit('updateCurrentOnline', countOnline);
     console.log('a user connected', socket.id);
 
     socket.on('disconnect', async () => {
         countOnline -= 1;
         console.log('a user disconnected', socket.id);
-        step = null;
-        game = {
-            fields: fields,
-            users: [],
-            bank: {},
-            status: StatusGame.WAITING,
-        };
-        io.sockets.disconnectSockets(true);
+        io.sockets.emit('updateCurrentOnline', countOnline);
     })
 
     socket.on('getCurrentOnline', () => {
@@ -58,7 +63,7 @@ io.on('connection', async (socket) => {
     });
 
 
-    socket.on('joinGame', async (address) => {
+    socket.on('joinGame', async () => {
         if (game.status === StatusGame.PROCESS) return socket.emit('error', 'The game has already started.');
 
         if (game.users.findIndex(u => u.address == address) === -1) {
