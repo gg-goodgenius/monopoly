@@ -4,7 +4,7 @@ import './GamersList.css'
 function GamersList() {
 
     return (
-        <div className="gamersList">
+        <div className="panel">
             <div className="header">
                 Gamers
             </div>

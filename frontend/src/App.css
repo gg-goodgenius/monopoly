@@ -3,3 +3,30 @@
   flex-direction: row;
   justify-content: space-around;
 }
+
+.gamePanel {
+  display: flex;
+  width: 600px;
+  height: 100vh;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.panel {
+    border-top: 3px solid black;
+    padding-top: 16px;
+    margin-top: 16px;
+    font-size: 10pt;
+}
+
+.gameSubPanel {
+  display: flex;
+  width: 40%;
+  flex-direction: column;
+  justify-content: start;
+  
+}
+
+.gamePanel .header {
+  font-size: 24pt;
+}

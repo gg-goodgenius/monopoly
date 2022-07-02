@@ -1,19 +1,19 @@
 .cardItem {
     display: flex;
     flex-direction: column;
-    font-size: 14pt;
     font-weight: 100;
-    margin-bottom: 32px;
+    margin-top: 16px;
 }
 
 .cardItem .name {
     display: flex;
     flex-direction: row;
+    font-weight: 500;
 }
 
 .cardItem .color {
-    height: 32px;
-    width: 32px;
-    margin-right: 16px;
+    height: 16px;
+    width: 16px;
+    margin-right: 8px;
 }
 

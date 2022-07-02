@@ -2,11 +2,11 @@ import './Cubes.css'
 function Cubes() {
 
     return (
-        <div className="cubes">
-            <div>
+        <div className='panel'>
+            <div className='header'>
                 Cubes
             </div>
-            <div>
+            <div className="cubes">
             6-2
             </div>
         </div>
