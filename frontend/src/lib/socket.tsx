@@ -12,19 +12,19 @@ export const initialSocket = (url:string) => {
         console.log("TONOPOLY: Disconnect from server via socket", socket.id);
     })
 
-    socket.on("updateCurrentOnline", (data)=>{
+    socket.on("updateCurrentOnline", (data: any)=>{
         console.log("TONOPOLY: Update current online gamers", data);
     })
 
-    socket.on("updateCurrentOnline", (data)=>{
+    socket.on("updateCurrentOnline", (data: any)=>{
         console.log("TONOPOLY: Update current online gamers", data);
     })
 
-    socket.on("updateGame", (data)=>{
+    socket.on("updateGame", (data: any)=>{
         console.log("TONOPOLY: Update games state", data);
     })
 
-    socket.on("error", (data)=>{
+    socket.on("error", (data: any)=>{
         console.error("TONOPOLY:", data);
     })
 

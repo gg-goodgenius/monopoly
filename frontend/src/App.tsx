@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import Board from './components/board/Board';
 import './App.css'
 import GamersList from './components/gamersList/GamersList';
@@ -6,6 +6,7 @@ import CardsList from './components/cardsList/CardsList';
 import Cubes from './components/cubes/Cubes';
 import ActionPanel from './components/actionPanel/ActionPanel';
 import WalletInfo from './components/walletInfo/WalletInfo';
+import {StateContext} from "./context/State";
 
 function App() {
   return (

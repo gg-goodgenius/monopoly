@@ -1,7 +1,6 @@
 import express from 'express';
 import http from 'http';
 import {Server} from "socket.io";
-import {createClient} from "redis";
 import {fields} from "./contatnts";
 import {ClientToServerEvents, ServerToClientEvents} from "./types/socket";
 import {Game, StatusGame, Step} from "./types/game";
@@ -63,7 +62,6 @@ io.on('connection', async (socket) => {
 
     socket.on('joinGame', async () => {
         if (game.status === StatusGame.PROCESS) return socket.emit('error', 'The game has already started.');
-
         if (game.users.findIndex(u => u.address == address) === -1) {
             game.users.push({
                 index: game.users.length,
@@ -98,7 +96,7 @@ io.on('connection', async (socket) => {
                     user: user,
                     countActions: 0
                 }
-                const randomVal = generateRandomInteger(1, 6);
+                const randomVal = generateRandomInteger(2, 12);
                 game.users[user.index].countSteps += 1;
                 if ((game.users[user.index].position + randomVal) > 39) {
                     game.users[user.index].position += (game.users[user.index].position + randomVal) - 40;
