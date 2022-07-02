@@ -1,3 +1,5 @@
+import {Gamer} from "./game";
+
 interface Field {
     id: number,
     name: string,
@@ -34,6 +36,7 @@ export interface FieldObject extends Field {
     price: number,
     priceRent?: number,
     color: string,
+    owner?: Gamer
 }
 
 export interface FieldStart extends Field {
