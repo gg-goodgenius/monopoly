@@ -1,13 +1,13 @@
-import {createContext, useState, useEffect} from "react";
+import { createContext, useState, useEffect } from "react";
 import gameProfile from './../lib/ton'
 import { initialSocket } from "../lib/socket";
 
 export const StateContext = createContext<any>(null);
 
-export const State = ({children}: any) => {
-    const [ profile, setProfile ] = useState<any>();
-    const [ cubes, setCubes ] = useState<any>();
-    const [ listGamers, setListGamers ] = useState<any>([
+export const State = ({ children }: any) => {
+    const [profile, setProfile] = useState<any>();
+    const [cubes, setCubes] = useState<any>();
+    const [listGamers, setListGamers] = useState<any>([
         {
             name: "0x00",
             balance: "14",
@@ -36,7 +36,7 @@ export const State = ({children}: any) => {
             active: true
         },
     ]);
-    const [ myCards, setMyCards ] = useState<any>([
+    const [myCards, setMyCards] = useState<any>([
         {
             name: "BOARDWALK",
             level: 2,
@@ -58,20 +58,20 @@ export const State = ({children}: any) => {
             color: 'green'
         },
     ])
-    const [ socket, setSocket ] = useState<any>()
+    const [socket, setSocket] = useState<any>()
 
-    useEffect(()=>{
-        const myprofile = async () => { 
+    useEffect(() => {
+        const updateData = async () => {
             const data = await gameProfile()
             setProfile(data)
-            setSocket(initialSocket('ws://localhost:3000?address='+data.address))
-            console.log(socket);
+            setSocket(initialSocket('ws://localhost:3000?address=' + data.address))
+            console.log(socket)
+            setCubes([0, 0])
         }
-        myprofile()
-        setCubes([0,0])
-    },[])
+        updateData()
+    }, [])
 
-    return(
+    return (
         <StateContext.Provider
             value={{
                 profile,

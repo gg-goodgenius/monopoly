@@ -16,10 +16,6 @@ export const initialSocket = (url:string) => {
         console.log("TONOPOLY: Update current online gamers", data);
     })
 
-    socket.on("updateCurrentOnline", (data)=>{
-        console.log("TONOPOLY: Update current online gamers", data);
-    })
-
     socket.on("updateGame", (data)=>{
         console.log("TONOPOLY: Update games state", data);
     })
