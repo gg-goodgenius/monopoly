@@ -42,7 +42,7 @@
     align-items: center;
   }
 
-  .gamePanel {
+  /* .gamePanel {
     flex-direction: column;
     align-content: center;
     align-items: center;
@@ -52,7 +52,7 @@
     flex-direction: column;
     align-content: center;
     align-items: center;
-  }
+  } */
 
 
 }
