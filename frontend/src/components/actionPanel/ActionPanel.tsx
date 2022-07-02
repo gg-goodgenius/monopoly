@@ -11,7 +11,7 @@ function ActionPanel(props: any) {
                 Action panel
                </div>
                <Button name='Add balance (+15TON)' />
-               <Button name='Update wallet info'/>
+               <Button name='Update wallet info' handleClick={wallet}/>
         </div>
     )
 
