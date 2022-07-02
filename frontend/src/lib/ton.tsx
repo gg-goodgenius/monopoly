@@ -1,30 +1,30 @@
 import TonWeb from 'tonweb'
 
-function toHexString(byteArray:any) {
-    return Array.prototype.map.call(byteArray, function(byte) {
-        return ('0' + (byte & 0xFF).toString(16)).slice(-2);
-    }).join('');
-}
-
-const wallet =  async () => {
-    const tonweb = new TonWeb()
+const gameProfile =  async () => {
+    const tonweb = new TonWeb(new TonWeb.HttpProvider('https://testnet.toncenter.com/api/v2/jsonRPC', {apiKey: '75ce0190fa40d05f24ca4641a45b686cfe50715a1e3c859bc698157c03b36eac'}));
     const nacl = tonweb.utils.nacl;
     const secret:any = localStorage.getItem("tonopoly_secret")
     
     if (secret) {
-        console.log(secret)
         const hexSecret = tonweb.utils.hexToBytes(secret)
         const keyPair = nacl.sign.keyPair.fromSecretKey(hexSecret)
         const wallet = tonweb.wallet.create({publicKey: keyPair.publicKey, wc: 0})
-        console.log("TONOPOLY: Wallet was loaded",wallet, keyPair)
-        return {wallet, keyPair}
+        const address = (await wallet.getAddress()).toString()
+        const shortAddress = address.slice(0, 8) + "..." + address.slice(-5)
+        const balance = tonweb.utils.fromNano(await tonweb.getBalance(address))
+        console.log("TONOPOLY: Wallet was loaded",wallet, keyPair, address, balance, shortAddress)
+        return {wallet, keys: keyPair, address, balance, shortAddress}
     } else {
         const newKeyPair = TonWeb.utils.nacl.sign.keyPair()
         const wallet = tonweb.wallet.create({publicKey: newKeyPair.publicKey, wc: 0});
-        localStorage.setItem('tonopoly_seed', TonWeb.utils.bytesToHex(newKeyPair.secretKey))
-        console.log("TONOPOLY: Wallet was created",wallet, newKeyPair);
-        return {wallet, newKeyPair}
+        localStorage.setItem('tonopoly_secret', TonWeb.utils.bytesToHex(newKeyPair.secretKey))
+        const address = (await wallet.getAddress()).toString()
+        const shortAddress = address.slice(0, 8) + "..." + address.slice(-5)
+        const balance = tonweb.utils.fromNano(await tonweb.getBalance(address))
+        console.log("TONOPOLY: Wallet was created",wallet, newKeyPair, address, balance, shortAddress)
+        return {wallet, keys: newKeyPair, address, balance, shortAddress}
     }
 }
 
-export default wallet;
+
+export default gameProfile;

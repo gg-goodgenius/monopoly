@@ -1,7 +1,7 @@
 import "./button.css"
 function Button(props: any) {
     return (
-        <div className="button" onClick={props.handleClick}>
+        <div className="button" onClick={props.onClick}>
             <span></span>
             <span></span>
             <span></span>

@@ -15,7 +15,7 @@ function App() {
         <div className='gameSubPanel'>
           <Cubes />
           <ActionPanel />
-          <WalletInfo address='0x00' balance={0} />
+          <WalletInfo />
           <GamersList />
         </div>
         <div className='gameSubPanel'>
