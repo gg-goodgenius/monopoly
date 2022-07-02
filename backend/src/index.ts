@@ -2,19 +2,14 @@ import express from 'express';
 import http from 'http';
 import {Server} from "socket.io";
 import {createClient} from "redis";
+import {fields} from "./contatnts";
+import {ClientToServerEvents, ServerToClientEvents} from "./types/socket";
+import {Game, StatusGame} from "./types/game";
 
 const redis = createClient();
 
 const app = express();
 const server = http.createServer(app);
-
-interface ServerToClientEvents {
-    room: (e: any) => void
-}
-
-interface ClientToServerEvents {
-    room: () => void
-}
 
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
     cors: {
@@ -25,25 +20,56 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
     }
 });
 
-
 app.use('/', (req, res) => {
     res.json({
         response: 'ok'
     })
 })
 
+let game: Game = {
+    fields: fields,
+    users: [],
+    bank: {},
+    status: StatusGame.WAITING
+};
+let countOnline = 0;
 
 io.on('connection', async (socket) => {
-    console.log('a user connected');
-    await redis.hSet('online', socket.id, 0);
+    countOnline += 1;
+    socket.broadcast.emit('updateCurrentOnline', countOnline);
+    console.log('a user connected', socket.id);
 
     socket.on('disconnect', async () => {
-        await redis.hDel('online', socket.id)
+        countOnline -= 1;
+        console.log('a user disconnected', socket.id);
+        socket.broadcast.emit('updateCurrentOnline', countOnline);
     })
 
-    socket.on('room', () => {
-        socket.emit('room', {name: 'test'});
+    socket.on('getCurrentOnline', () => {
+        io.sockets.emit('updateCurrentOnline', countOnline);
     });
+
+
+    socket.on('joinGame', async (address) => {
+        if(game.status === StatusGame.PROCESS) return socket.emit('error', 'The game has already started.');
+
+        if(game.users.findIndex(u => u.address == address) === -1) {
+            game.users.push({
+                address: address,
+                balance: 0
+            });
+            socket.join('game');
+            io.to('game').emit('updateGame', game);
+        }
+    });
+
+    socket.on('startGame', async () => {
+        if(game.users.length > 1) {
+            game.status = StatusGame.PROCESS;
+            io.to('game').emit('updateGame', game);
+        } else
+            return socket.emit('error', 'Very few people')
+    })
 
 });
 
