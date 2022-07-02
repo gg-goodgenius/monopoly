@@ -10,7 +10,7 @@ function WalletInfo() {
     return (
         <div className="panel">
             <div className="header">
-                Wallet ifno
+                Wallet info
             </div>
             {profile &&
                 <>

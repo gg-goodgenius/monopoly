@@ -13,10 +13,10 @@
 }
 
 .panel {
-    border-top: 3px solid black;
-    padding-top: 16px;
-    margin-top: 16px;
-    font-size: 10pt;
+  border-top: 3px solid black;
+  padding-top: 16px;
+  margin-top: 16px;
+  font-size: 10pt;
 }
 
 .gameSubPanel {
@@ -24,11 +24,15 @@
   width: 40%;
   flex-direction: column;
   justify-content: start;
-  
+
 }
 
 .gamePanel .header {
   font-size: 24pt;
+}
+
+.mobile {
+  display: none;
 }
 
 @media screen and (max-width: 1400px) {
@@ -36,5 +40,38 @@
     flex-direction: column;
     align-content: center;
     align-items: center;
+  }
+
+  .gamePanel {
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+  }
+
+  .gameSubPanel {
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+  }
+
+
+}
+
+@media only screen and (max-width: 480px) {
+  .game {
+    display: none;
+  }
+
+  .mobile {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .mobile div {
+    display: flex;
+    width: 100%;
+    font-size: 18pt;
+    text-align: center;
   }
 }

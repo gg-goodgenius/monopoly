@@ -11,7 +11,19 @@ export const State = ({children}: any) => {
         {
             name: "0x00",
             balance: "14",
-            active: false
+            active: false,
+            offers: [
+                {
+                    name: "BOARDWALK",
+                    color: 'dark-blue',
+                    price: 1,
+                },
+                {
+                    name: "MEDITER-RANEAN AVENUE",
+                    color: 'dark-purple',
+                    price: 1.4,
+                },
+            ]
         },
         {
             name: "0x01",
@@ -59,6 +71,7 @@ export const State = ({children}: any) => {
         profile()
         setCubes([0,0])
         const socket = io("ws://127.0.0.1:3000");
+        
     },[])
 
     return(

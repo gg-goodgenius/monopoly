@@ -35,6 +35,9 @@
 	background: #5a6dba;
   }
   
+  .table {
+	transform: scale(0.9);
+  }
   
   .board {
 	display: grid;
@@ -45,6 +48,7 @@
 	height: 990px;
 	background: #080808;
 	border: 2px solid #080808;
+	
   }
   
   .center {
