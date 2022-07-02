@@ -3,9 +3,9 @@ import './CardItem.css'
 
 function CardItem(props: any) {
     let level = 'No update'
-    if (props.level == 4) {
+    if (props.level === 5) {
         level = 'Hotel'
-    } else if (props.level == 0) {
+    } else if (props.level === 0) {
         level = 'No builds'
     } else level = props.level + ' house'
 

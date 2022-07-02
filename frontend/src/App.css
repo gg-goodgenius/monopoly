@@ -30,3 +30,11 @@
 .gamePanel .header {
   font-size: 24pt;
 }
+
+@media screen and (max-width: 1400px) {
+  .game {
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+  }
+}

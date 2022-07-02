@@ -1,13 +1,13 @@
-import "./UserInfoPanel.css"
+import "./WalletInfo.css"
 
-function UserInfoPanel(props: any) {
+function WalletInfo(props: any) {
     return (
         <div className="panel">
                <div className="header">
                 User info
                </div>
                <div>
-                Wallet: {props.wallet}
+                Address: {props.address}
                </div>
                <div>
                 Balance: {props.balance} TON
@@ -17,4 +17,4 @@ function UserInfoPanel(props: any) {
 
 }
 
-export default UserInfoPanel;
+export default WalletInfo;
