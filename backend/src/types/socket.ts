@@ -11,5 +11,6 @@ export interface ClientToServerEvents {
     joinGame: (address: string) => void,
     startGame: () => void,
     startStep: () => void,
+    doActionStep: () => void,
     finishStep: () => void
 }

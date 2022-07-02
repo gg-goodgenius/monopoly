@@ -43,7 +43,14 @@ io.on('connection', async (socket) => {
     socket.on('disconnect', async () => {
         countOnline -= 1;
         console.log('a user disconnected', socket.id);
-        socket.broadcast.emit('updateCurrentOnline', countOnline);
+        step = null;
+        game = {
+            fields: fields,
+            users: [],
+            bank: {},
+            status: StatusGame.WAITING,
+        };
+        io.sockets.disconnectSockets(true);
     })
 
     socket.on('getCurrentOnline', () => {
@@ -52,9 +59,9 @@ io.on('connection', async (socket) => {
 
 
     socket.on('joinGame', async (address) => {
-        if(game.status === StatusGame.PROCESS) return socket.emit('error', 'The game has already started.');
+        if (game.status === StatusGame.PROCESS) return socket.emit('error', 'The game has already started.');
 
-        if(game.users.findIndex(u => u.address == address) === -1) {
+        if (game.users.findIndex(u => u.address == address) === -1) {
             game.users.push({
                 index: game.users.length,
                 address: address,
@@ -69,7 +76,8 @@ io.on('connection', async (socket) => {
     });
 
     socket.on('startGame', async () => {
-        if(game.users.length > 1) {
+        if (game.status === StatusGame.PROCESS) return socket.emit('error', 'Game started yet');
+        if (game.users.length > 1) {
             game.status = StatusGame.PROCESS;
             game.nextStepSocketId = game.users[0].socketId;
             io.to('game').emit('updateGame', game);
@@ -78,25 +86,26 @@ io.on('connection', async (socket) => {
     })
 
     socket.on('startStep', () => {
+        if (game.status === StatusGame.WAITING) return socket.emit('error', 'Game not started yet');
         if (step) return socket.emit('error', 'Step already started')
-        if(game.nextStepSocketId) {
+        if (game.nextStepSocketId) {
             const user = game.users.find(u => u.socketId === game.nextStepSocketId);
-            if(user?.socketId === socket.id) {
+            if (user?.socketId === socket.id) {
                 step = {
                     user: user,
                     countActions: 0
                 }
                 const randomVal = generateRandomInteger(1, 6);
                 game.users[user.index].countSteps += 1;
-                if((game.users[user.index].position + randomVal) > 39) {
+                if ((game.users[user.index].position + randomVal) > 39) {
                     game.users[user.index].position += (game.users[user.index].position + randomVal) - 40;
                 } else
                     game.users[user.index].position += randomVal;
 
                 const cField = game.fields[game.users[user.index].position];
-                if(cField) {
-                    if(cField.type === 'object') {
-                        if(cField.owner) {
+                if (cField) {
+                    if (cField.type === 'object') {
+                        if (cField.owner) {
                             //TODO pay rent to owner
                         }
                     }
@@ -106,9 +115,10 @@ io.on('connection', async (socket) => {
     });
 
     socket.on('finishStep', () => {
-        if(step?.user) {
-            if(step.user.socketId === socket.id) {
-                game.nextStepSocketId = game.users[step?.user.index+1]?.socketId ?? game.users[0].socketId;
+        if (game.status === StatusGame.WAITING) return socket.emit('error', 'Game not started yet');
+        if (step?.user) {
+            if (step.user.socketId === socket.id) {
+                game.nextStepSocketId = game.users[step?.user.index + 1]?.socketId ?? game.users[0].socketId;
                 io.to('game').emit('updateGame', game);
                 step = null;
             } else return socket.emit('error', 'The step is not yours')
@@ -124,5 +134,5 @@ server.listen(process.env.PORT ?? 3000, async () => {
 });
 
 function generateRandomInteger(min: number, max: number) {
-    return Math.floor(min + Math.random()*(max - min + 1))
+    return Math.floor(min + Math.random() * (max - min + 1))
 }
