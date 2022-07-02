@@ -14,7 +14,7 @@ function GamersList() {
             <div className="gamers">
                 {
                     listGamers.map((gamer: any, index: number) => {
-                        return <GamerItem {...gamer} />
+                        return <GamerItem key={gamer.name} {...gamer}/>
                     })
                 }
             </div>

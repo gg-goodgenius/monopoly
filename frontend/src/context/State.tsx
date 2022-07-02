@@ -1,6 +1,6 @@
 import {createContext, useState, useEffect} from "react";
 import gameProfile from './../lib/ton'
-import { io } from "socket.io-client"
+import { initialSocket } from "../lib/socket";
 
 export const StateContext = createContext<any>(null);
 
@@ -58,20 +58,17 @@ export const State = ({children}: any) => {
             color: 'green'
         },
     ])
-
     const [ socket, setSocket ] = useState<any>()
 
-
-
     useEffect(()=>{
-        const profile = async () => { 
+        const myprofile = async () => { 
             const data = await gameProfile()
             setProfile(data)
+            setSocket(initialSocket('ws://localhost:3000?address='+data.address))
+            console.log(socket);
         }
-        profile()
+        myprofile()
         setCubes([0,0])
-        const socket = io("ws://127.0.0.1:3000");
-        
     },[])
 
     return(

@@ -13,7 +13,7 @@ function CardsList() {
             <div className="cards">
                 {
                     myCards.map((card: any, index: number) => {
-                        return <CardItem {...card} />
+                        return <CardItem key={index} {...card} />
                     })
                 }
             </div>
