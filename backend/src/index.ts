@@ -6,8 +6,6 @@ import {fields} from "./contatnts";
 import {ClientToServerEvents, ServerToClientEvents} from "./types/socket";
 import {Game, StatusGame, Step} from "./types/game";
 
-const redis = createClient();
-
 const app = express();
 const server = http.createServer(app);
 
@@ -134,7 +132,6 @@ io.on('connection', async (socket) => {
 });
 
 server.listen(process.env.PORT ?? 3000, async () => {
-    await redis.connect();
     console.log('listening on *:' + (process.env.PORT ?? 3000));
 });
 
