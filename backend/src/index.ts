@@ -56,7 +56,8 @@ io.on('connection', async (socket) => {
         if(game.users.findIndex(u => u.address == address) === -1) {
             game.users.push({
                 address: address,
-                balance: 0
+                balance: 0,
+                position: 0
             });
             socket.join('game');
             io.to('game').emit('updateGame', game);

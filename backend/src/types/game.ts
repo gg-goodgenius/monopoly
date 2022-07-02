@@ -13,6 +13,7 @@ export interface Game {
     users: {
             address: string,
             name?: string,
-            balance: number
+            balance: number,
+            position: number
     }[]
 }
