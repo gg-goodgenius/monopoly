@@ -3,15 +3,15 @@ import "./WalletInfo.css"
 function WalletInfo(props: any) {
     return (
         <div className="panel">
-               <div className="header">
-                User info
-               </div>
-               <div>
+            <div className="header">
+                Wallet ifno
+            </div>
+            <div>
                 Address: {props.address}
-               </div>
-               <div>
+            </div>
+            <div>
                 Balance: {props.balance} TON
-               </div>
+            </div>
         </div>
     )
 
