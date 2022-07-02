@@ -1,0 +1,10 @@
+.gamerItem {
+    display: flex;
+    flex-direction: row;
+    font-size: 18pt;
+}
+
+.active {
+    color: green;
+}
+

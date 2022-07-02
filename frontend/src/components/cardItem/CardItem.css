@@ -1,0 +1,19 @@
+.cardItem {
+    display: flex;
+    flex-direction: column;
+    font-size: 14pt;
+    font-weight: 100;
+    margin-bottom: 32px;
+}
+
+.cardItem .name {
+    display: flex;
+    flex-direction: row;
+}
+
+.cardItem .color {
+    height: 32px;
+    width: 32px;
+    margin-right: 16px;
+}
+

@@ -1,0 +1,9 @@
+.cardsList .header {
+    font-size: 36pt;
+}
+
+.cardsList {
+    border-bottom: 3px solid black;
+    padding-bottom: 32px;
+    margin-bottom: 32px;
+}
