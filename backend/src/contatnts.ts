@@ -1,0 +1,140 @@
+const fieldsCards = [
+    {
+        id: 0,
+        name: 'GO',
+        type: 'start'
+    },
+    {
+        id: 0,
+        color: "dark-purple",
+        name: "MEDITER-RANEAN AVENUE",
+        price: 0.5,
+        type: 'realty'
+    },
+    {
+        id: 1,
+        color: "dark-purple",
+        name: "BALTIC AVENUE",
+        price: 0.5,
+    },
+    {
+        id: 2,
+        color: "light-blue",
+        name: "ORIENTAL AVENUE",
+        price: 1,
+    },
+    {
+        id: 3,
+        color: "light-blue",
+        name: "VERMONT AVENUE",
+        price: 1,
+    },
+    {
+        id: 4,
+        color: "light-blue",
+        name: "CONNECTICUT AVENUE",
+        price: 1.2,
+    },
+    {
+        id: 5,
+        color: "purple",
+        name: "ST. CHARLES PLACE",
+        price: 1.4,
+    },
+    {
+        id: 6,
+        color: "purple",
+        name: "STATES AVENUE",
+        price: 1.4,
+    },
+    {
+        id: 7,
+        color: "purple",
+        name: "VIRGINIA AVENUE",
+        price: 1.6,
+    },
+    {
+        id: 8,
+        color: "orange",
+        name: "ST. JAMES AVENUE",
+        price: 1.8,
+    },
+    {
+        id: 9,
+        color: "orange",
+        name: "TENNESSEE AVENUE",
+        price: 1.8,
+    },
+    {
+        id: 10,
+        color: "orange",
+        name: "NEW YORK AVENUE",
+        price: 2,
+    },
+    {
+        id: 11,
+        color: "red",
+        name: "KENTUCKY AVENUE",
+        price: 2.2,
+    },
+    {
+        id: 12,
+        color: "red",
+        name: "INDIANA AVENUE",
+        price: 2.2,
+    },
+    {
+        id: 13,
+        color: "red",
+        name: "ILLINOIS AVENUE",
+        price: 2,
+    },
+    {
+        id: 14,
+        color: "yellow",
+        name: "ATLANTIC AVENUE",
+        price: 2.6,
+    },
+    {
+        id: 15,
+        color: "yellow",
+        name: "VENTNOR AVENUE",
+        price: 2.6,
+    },
+    {
+        id: 16,
+        color: "yellow",
+        name: "MARVIN GARDENS",
+        price: 2.8,
+    },
+    {
+        id: 17,
+        color: "green",
+        name: "PACIFIC AVENUE",
+        price: 3,
+    },
+    {
+        id: 18,
+        color: "green",
+        name: "NORTH CAROLINA AVENUE",
+        price: 3,
+    },
+    {
+        id: 19,
+        color: "green",
+        name: "PENNSYLVANIA AVENUE",
+        price: 3.2,
+    },
+    {
+        id: 20,
+        color: "dark-blue",
+        name: "PARK PLACE",
+        price: 3.5,
+    },
+    {
+        id: 21,
+        color: "dark-blue",
+        name: "BOARDWALK",
+        price: 4,
+    },
+];
