@@ -1,5 +1,5 @@
 import "./button.css"
-function Button(props: any) {
+export function Button(props: any) {
     return (
         <div className="button" onClick={props.onClick}>
             <span></span>
@@ -9,7 +9,16 @@ function Button(props: any) {
             {props.name}
         </div>
     )
-
 }
 
-export default Button;
+export function MiniButton(props: any) {
+    return (
+        <div className="button mini" onClick={props.onClick}>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            {props.name}
+        </div>
+    )
+}

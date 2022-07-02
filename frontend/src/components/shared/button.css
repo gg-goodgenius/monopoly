@@ -12,6 +12,10 @@
   transition: all 0.1s linear;
   cursor: pointer;
 }
+.mini {
+  padding: 4px 8px;
+  margin: 4px;
+}
 .button:hover {
   border: 1px solid transparent;
 }

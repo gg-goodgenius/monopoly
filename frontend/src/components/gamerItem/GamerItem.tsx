@@ -4,7 +4,7 @@ function GamerItem(props: any) {
     const is_active:string = props.active ? "active " : ""
     return (
         <div className={is_active + "gamerItem"}>
-               {props.name}
+               {props.name} - {props.balance} TON
         </div>
     )
 

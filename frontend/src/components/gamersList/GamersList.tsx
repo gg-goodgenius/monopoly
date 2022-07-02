@@ -1,17 +1,22 @@
 import GamerItem from '../gamerItem/GamerItem';
 import './GamersList.css'
+import { useContext } from 'react'
+import { StateContext } from './../../context/State'
+
 
 function GamersList() {
-
+    const { listGamers } = useContext(StateContext)
     return (
         <div className="panel">
             <div className="header">
                 Gamers
             </div>
             <div className="gamers">
-                <GamerItem name={'Gamer 1'} active={false}/>
-                <GamerItem name={'Gamer 2'} active={true}/>
-                <GamerItem name={'Gamer 3'} active={false}/>
+                {
+                    listGamers.map((gamer: any, index: number) => {
+                        return <GamerItem {...gamer} />
+                    })
+                }
             </div>
         </div>
     )

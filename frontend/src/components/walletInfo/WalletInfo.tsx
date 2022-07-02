@@ -20,6 +20,9 @@ function WalletInfo() {
                     <div>
                         Balance: {profile && profile.balance} TON
                     </div>
+                    <div>
+                        TONScan: <a href={"https://testnet.tonscan.org/address/"+profile.address} target='_blank'>click</a>
+                    </div>
                 </>
             }
 

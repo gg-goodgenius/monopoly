@@ -1,5 +1,5 @@
 import './CardItem.css'
-
+import { MiniButton } from "../shared/button";
 
 function CardItem(props: any) {
     let level = 'No update'
@@ -16,7 +16,12 @@ function CardItem(props: any) {
                 <div >{props.name}</div>
             </div>
             <div>Building: {level}</div>
-            <div>Action: up, down, sell, to bank</div>
+            <div> 
+            <MiniButton name='Build'/>
+            <MiniButton name='Sell'/>
+            <MiniButton name='Mortgage'/>
+            <MiniButton name='Offer'/>
+            </div>
         </div>
     )
 
