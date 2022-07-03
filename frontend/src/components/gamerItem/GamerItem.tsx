@@ -9,12 +9,14 @@ function GamerItem(props: any) {
     }
     return (
         <div key={props.name}>
-            { props.currentStep && 
-            <span>X</span>}
-            <div className={is_active + "gamerItem"} style={{color:props.color}}>
-                {props.address.slice(0,5)}...{props.address.slice(-8)} - {props.balance} TON
+
+            <div className={is_active + "gamerItem"} style={{ color: props.color }}>
+                
+                {props.address.slice(0, 5)}...{props.address.slice(-8)} - {props.balance} TON
+                {props.currentStep &&
+                    <span> - [X] </span>}
             </div>
-            {props.offers && 
+            {props.offers &&
                 <div>
                     Offers:
                     {
@@ -22,7 +24,7 @@ function GamerItem(props: any) {
                             return <div key={offer.name}><div>
                                 {offer.name} - {offer.price} TON
                             </div>
-                                <MiniButton name='Buy' onClick={handleBuy}/>
+                                <MiniButton name='Buy' onClick={handleBuy} />
                             </div>
                         })
                     }
