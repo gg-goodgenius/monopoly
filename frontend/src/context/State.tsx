@@ -10,6 +10,7 @@ export const State = ({ children }: any) => {
     const [socket, setSocket] = useState<any>()
     const [user, setUser] = useState<any>()
     const [payment, setPayment] = useState<any>()
+    const [channelState, setChannelState] = useState<any>()
 
     useEffect(() => {
         const myprofile = async () => {
@@ -35,16 +36,12 @@ export const State = ({ children }: any) => {
             })
             socket.on("changeBalance", (data: any) => {
                 console.log("TONOPOLY: change balance", data);
-
+                setChannelState(data)
+                
             })
 
             socket.on("updateStateChannel", (data: any) => {
                 console.log("TONOPOLY: update state channel", data);
-                const sign = async () => {
-                    const signState = await payment.channel.signState(data)
-                    return signState
-                }
-                console.log("TONOPOLY: sign state", sign());
             })
 
             socket.on("initChannel", async (data: any) => {
@@ -94,8 +91,8 @@ export const State = ({ children }: any) => {
                 console.log("TONOPOLY: fromWallet",fromWallet)
                 
                 const test = fromWallet.topUp({ coinsA: new BN(0), coinsB: channelInitState.balanceB })
-
-                const address = (await fromWallet
+                const address =  (await channel.getAddress()).toString(true, true, true)
+                (await fromWallet
                         .topUp({ coinsA: new BN(0), coinsB: channelInitState.balanceB })
                         .send(channelInitState.balanceB.add(toNano('0.05')))).toString();
             
@@ -121,7 +118,9 @@ export const State = ({ children }: any) => {
                 setSocket,
                 user,
                 payment,
-                setPayment
+                setPayment,
+                channelState,
+                setChannelState
             }}
         >
             {children}
