@@ -1,10 +1,10 @@
-import {createContext, useState, useEffect} from "react";
+import { createContext, useState, useEffect } from "react";
 import gameProfile from './../lib/ton'
-import {initialSocket} from "../lib/socket";
+import { io } from "socket.io-client"
 
 export const StateContext = createContext<any>(null);
 
-export const State = ({children}: any) => {
+export const State = ({ children }: any) => {
     const [profile, setProfile] = useState<any>();
     const [cubes, setCubes] = useState<any>();
     const [listGamers, setListGamers] = useState<any>([
@@ -64,12 +64,29 @@ export const State = ({children}: any) => {
         const myprofile = async () => {
             const data = await gameProfile()
             setProfile(data)
-            const dataSocket = await initialSocket('ws://localhost:3000?address=' + data.address)
-            setSocket(dataSocket)
+            const socket = io('ws://localhost:3000?address=' + data.address)
+            socket.on("connect", () => {
+                console.log("TONOPOLY: Connect to server via socket", socket.id);
+            })
+            socket.on("disconnect", () => {
+                console.log("TONOPOLY: Disconnect from server via socket", socket.id);
+            })
+            socket.on("updateCurrentOnline", (data: any) => {
+                console.log("TONOPOLY: Update current online gamers", data);
+
+            })
+            socket.on("updateGame", (data: any) => {
+                console.log("TONOPOLY: Update games state", data);
+            })
+            socket.on("error", (data: any) => {
+                console.error("TONOPOLY:", data);
+            })
+
+            setSocket(socket)
             setCubes([0, 0])
         }
         myprofile();
-        
+
     }, [])
 
     return (
@@ -84,7 +101,7 @@ export const State = ({children}: any) => {
                 myCards,
                 setMyCards,
                 socket,
-                setSocket
+                setSocket,
             }}
         >
             {children}
