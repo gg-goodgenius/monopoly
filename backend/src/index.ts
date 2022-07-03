@@ -75,7 +75,8 @@ io.on('connection', async (socket) => {
                 socketId: socket.id,
                 balance: 15,
                 positionFieldId: 0,
-                color: '#' + randomColor
+                color: '#' + randomColor,
+                currentStep: false
             });
             socket.join('game');
             io.to('game').emit('updateGame', game);
@@ -86,7 +87,7 @@ io.on('connection', async (socket) => {
         if (game.status === StatusGame.PROCESS) return socket.emit('error', 'Game started yet');
         if (game.users.length > 1) {
             game.status = StatusGame.PROCESS;
-            game.nextStepSocketId = game.users[0].socketId;
+            game.users[0].currentStep = true;
             io.to('game').emit('updateGame', game);
         } else
             return socket.emit('error', 'Very few people')
@@ -109,8 +110,7 @@ io.on('connection', async (socket) => {
     socket.on('startStep', () => {
         if (game.status === StatusGame.WAITING) return socket.emit('error', 'Game not started yet');
         if (step) return socket.emit('error', 'Step already started')
-        if (game.nextStepSocketId) {
-            const user = game.users.find(u => u.socketId === game.nextStepSocketId);
+            const user = game.users.find(u => u.currentStep);
             if (user?.socketId === socket.id) {
                 step = {
                     user: user,
@@ -125,7 +125,7 @@ io.on('connection', async (socket) => {
                     game.users[user.index].positionFieldId += randomVal;
                 io.to('game').emit('updateGame', game);
             }
-        }
+    
     });
 
     socket.on('doActionStep', (type, id) => {
@@ -182,7 +182,13 @@ io.on('connection', async (socket) => {
         if (game.status === StatusGame.WAITING) return socket.emit('error', 'Game not started yet');
         if (step?.user) {
             if (step.user.socketId === socket.id) {
-                game.nextStepSocketId = game.users[step?.user.index + 1]?.socketId ?? game.users[0].socketId;
+                if(game.users[step?.user.index + 1] ) {
+                    game.users[step?.user.index].currentStep = false;
+                    game.users[step?.user.index + 1].currentStep = true;
+                } else {
+                    game.users[step?.user.index].currentStep = false;
+                    game.users[0].currentStep = true;
+                }
                 io.to('game').emit('updateGame', game);
                 step = null;
             } else return socket.emit('error', 'The step is not yours')
