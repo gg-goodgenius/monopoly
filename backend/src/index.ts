@@ -105,33 +105,7 @@ io.on('connection', async (socket) => {
                     game.users[user.index].positionFieldId += (game.users[user.index].positionFieldId + randomVal) - 40;
                 } else
                     game.users[user.index].positionFieldId += randomVal;
-
-                const cField = game.fields[game.users[user.index].positionFieldId];
-                if (cField) {
-                    switch (cField.type) {
-                        case "object":
-                            if (cField.owner) {
-                                if(cField.owner.index !== user.index) {
-                                    //TODO rendPrice
-                                    game.users[user.index].balance -= cField.priceRent ?? 2;
-                                    socket.emit('changeBalance', -2);
-                                    game.users[cField.owner.index].balance += cField.priceRent ?? 2;
-                                    io.to(game.users[cField.owner.index].socketId).emit('changeBalance', 2);
-                                }
-                            }
-                            break;
-                        case "tax":
-                            //TODO pay tax
-                            break;
-                        case "company":
-                            //TODO pay to user
-                            break;
-                        case "court":
-                            //TODO todo?
-                            break;
-
-                    }
-                }
+                io.to('game').emit('updateGame', game);
             }
         }
     });
@@ -155,6 +129,22 @@ io.on('connection', async (socket) => {
                     } else return socket.emit('error', 'Field already purchased')
                 }
                 break;
+
+            case "payRent":
+                const cField = game.fields[game.users[step.user.index].positionFieldId];
+                if(cField.type !== 'object') return socket.emit('error', 'You don\'t have to pay rent')
+                if (cField.owner) {
+                    if(cField.owner.index !== step.user.index) {
+                        const priceRent = (cField.level || 1)*0.25 * cField.price;
+                        game.users[step.user.index].balance -= priceRent;
+                        socket.emit('changeBalance', -priceRent);
+                        game.users[cField.owner.index].balance += priceRent;
+                        io.to(game.users[cField.owner.index].socketId).emit('changeBalance', -priceRent);
+                        io.to('game').emit('updateGame', game);
+                    } else return socket.emit('error', 'This field is yours')
+                } else return socket.emit('error', 'The field hurts no one')
+                break;
+
         }
     })
 

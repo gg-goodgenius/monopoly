@@ -12,6 +12,6 @@ export interface ClientToServerEvents {
     joinGame: () => void,
     startGame: () => void,
     startStep: () => void,
-    doActionStep: (type: 'buy' | 'offer' | 'sell', id?: number) => void,
+    doActionStep: (type: 'buy' | 'offer' | 'sell' | 'payRent', id?: number) => void,
     finishStep: () => void
 }

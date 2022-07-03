@@ -34,13 +34,12 @@ export interface FieldChance extends Field {
 export interface FieldObject extends Field {
     type: 'object'
     price: number,
-    priceRent?: number,
     color: string,
     owner?: {
         index: number
     },
     isOffer?: number,
-    level?: FieldObjectLevel
+    level?: number
 }
 
 export interface FieldStart extends Field {
@@ -59,11 +58,4 @@ export interface FieldCourt extends Field {
 export interface FieldCompany extends Field {
     type: 'company',
     price: number
-}
-
-export enum FieldObjectLevel {
-    level1,
-    level2,
-    level3,
-    level4
 }
