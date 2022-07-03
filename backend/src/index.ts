@@ -8,6 +8,8 @@ import {Game, StatusGame, Step} from "./types/game";
 const app = express();
 const server = http.createServer(app);
 
+const sleep = (millis) => new Promise(resolve => setTimeout(resolve, millis))
+
 const TonWeb = require("tonweb");
 const tonweb = new TonWeb(new TonWeb.HttpProvider('https://testnet.toncenter.com/api/v2/jsonRPC', { apiKey: 'f307083da5685e519f09b08a98a9117a262e7d5d1f563fb517b6492c785cbba7' }))
 const seedA = TonWeb.utils.hexToBytes('08ac1bbb9f36301fbcf3ad9ba5fd0591b5aed398b972e6f2d0f6d5f698d3b05f')
@@ -100,7 +102,7 @@ io.on('connection', async (socket) => {
             game.users[0].currentStep = true;
             io.to('game').emit('updateGame', game);
 
-            for (const user of game.users) {
+            game.users.forEach(async user => {
               const channelInitState = {
                   balanceA: toNano('15'),
                   balanceB: toNano('15'),
@@ -117,6 +119,7 @@ io.on('connection', async (socket) => {
                   initBalanceA: channelInitState.balanceA,
                   initBalanceB: channelInitState.balanceB
               }
+
               const channelA = tonweb.payments.createChannel({
                   ...channelConfig,
                   isA: true,
@@ -128,13 +131,19 @@ io.on('connection', async (socket) => {
                   secretKey: keyPairA.secretKey
               })
               await fromWalletA.deploy().send(toNano('0.05'))
+              
+              await sleep(6000)
 
-              //sleep
+              socket.emit('updateChannel', {
+                channelId: channelConfig.channelId,
+                publicKey: keyPairA.publicKey,
+                address: await walletA.getAddress()
+              })
 
               await fromWalletA
                   .topUp({ coinsA: channelInitState.balanceA, coinsB: new BN(0) })
                   .send(channelInitState.balanceA.add(toNano('0.05')))
-            }
+            })
             
         } else
             return socket.emit('error', 'Very few people')
