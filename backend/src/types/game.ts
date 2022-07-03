@@ -21,6 +21,7 @@ export interface Gamer {
     socketId: string,
     balance: number,
     positionFieldId: number,
+    color: string
 }
 
 export interface Step {

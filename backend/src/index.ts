@@ -66,12 +66,14 @@ io.on('connection', async (socket) => {
     socket.on('joinGame', async () => {
         if (game.status === StatusGame.PROCESS) return socket.emit('error', 'The game has already started.');
         if (game.users.findIndex(u => u.address == address) === -1) {
+            const randomColor = Math.floor(Math.random()*16777215).toString(16);
             game.users.push({
                 index: game.users.length,
                 address: address,
                 socketId: socket.id,
                 balance: 15,
                 positionFieldId: 0,
+                color: '#' + randomColor
             });
             socket.join('game');
             io.to('game').emit('updateGame', game);
@@ -147,7 +149,10 @@ io.on('connection', async (socket) => {
             case "sell": {
                 if (!id) return socket.emit('error', 'id not found');
                 const field = game.fields[id]
-                if (!game.fields[id]) return socket.emit('error', 'filed not found')
+                if (!field) return socket.emit('error', 'filed not found');
+                if(field.type === 'object') {
+
+                }
             }
             break;
 
