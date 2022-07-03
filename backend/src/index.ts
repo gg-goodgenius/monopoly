@@ -46,6 +46,8 @@ io.on('connection', async (socket) => {
         const i = game.users.findIndex(u => u.address === address);
         if (i > -1) {
             game.users[i].socketId = socket.id;
+            socket.join('game');
+            io.to('game').emit('updateGame', game);
         }
     }
 
@@ -151,7 +153,9 @@ io.on('connection', async (socket) => {
                 const field = game.fields[id]
                 if (!field) return socket.emit('error', 'filed not found');
                 if(field.type === 'object') {
+                    if(field.owner?.index) {
 
+                    }
                 }
             }
             break;
