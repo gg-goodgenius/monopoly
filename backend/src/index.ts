@@ -8,6 +8,18 @@ import {Game, StatusGame, Step} from "./types/game";
 const app = express();
 const server = http.createServer(app);
 
+const sleep = (millis: number) => new Promise(resolve => setTimeout(resolve, millis))
+
+const TonWeb = require("tonweb");
+const tonweb = new TonWeb(new TonWeb.HttpProvider('https://testnet.toncenter.com/api/v2/jsonRPC', { apiKey: 'f307083da5685e519f09b08a98a9117a262e7d5d1f563fb517b6492c785cbba7' }))
+const seedA = TonWeb.utils.hexToBytes('08ac1bbb9f36301fbcf3ad9ba5fd0591b5aed398b972e6f2d0f6d5f698d3b05f')
+const keyPairA = tonweb.utils.keyPairFromSeed(seedA)
+const walletA = tonweb.wallet.create({
+  publicKey: keyPairA.publicKey
+});
+const toNano = TonWeb.utils.toNano;
+const BN = TonWeb.utils.BN;
+
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
     cors: {
         origin: "*",
@@ -37,6 +49,7 @@ let countOnline = 0;
 
 io.on('connection', async (socket) => {
     const address = socket.handshake.query.address as string;
+    const userPublicKey = socket.handshake.query.publicKey as string;
     if (!address)
         return socket.disconnect(true);
 
@@ -76,7 +89,8 @@ io.on('connection', async (socket) => {
                 balance: 15,
                 positionFieldId: 0,
                 color: '#' + randomColor,
-                currentStep: false
+                currentStep: false,
+                publicKey: userPublicKey
             });
             socket.join('game');
             io.to('game').emit('updateGame', game);
@@ -89,6 +103,50 @@ io.on('connection', async (socket) => {
             game.status = StatusGame.PROCESS;
             game.users[0].currentStep = true;
             io.to('game').emit('updateGame', game);
+
+            game.users.forEach(async user => {
+              const channelInitState = {
+                  balanceA: toNano('15'),
+                  balanceB: toNano('15'),
+                  seqnoA: new BN(0),
+                  seqnoB: new BN(0)
+              }
+              const walletB = tonweb.wallet.create({
+                  publicKey: user.publicKey
+              });
+              const channelConfig = {
+                  channelId: new BN(generateRandomInteger(0, 10000)),
+                  addressA: await walletA.getAddress(),
+                  addressB: await walletB.getAddress(),
+                  initBalanceA: channelInitState.balanceA,
+                  initBalanceB: channelInitState.balanceB
+              }
+
+              const channelA = tonweb.payments.createChannel({
+                  ...channelConfig,
+                  isA: true,
+                  myKeyPair: keyPairA,
+                  hisPublicKey: user.publicKey,
+              });
+              const fromWalletA = channelA.fromWallet({
+                  wallet: walletA,
+                  secretKey: keyPairA.secretKey
+              })
+              await fromWalletA.deploy().send(toNano('0.05'))
+              
+              await sleep(6000)
+
+              socket.emit('initChannel', {
+                channelId: channelConfig.channelId,
+                publicKey: keyPairA.publicKey,
+                address: await walletA.getAddress()
+              })
+
+              await fromWalletA
+                  .topUp({ coinsA: channelInitState.balanceA, coinsB: new BN(0) })
+                  .send(channelInitState.balanceA.add(toNano('0.05')))
+            })
+            
         } else
             return socket.emit('error', 'Very few people')
     })
@@ -153,12 +211,31 @@ io.on('connection', async (socket) => {
                 const field = game.fields[id]
                 if (!field) return socket.emit('error', 'filed not found');
                 if(field.type === 'object') {
-                    if(field.owner?.index) {
-
+                    if(field.owner?.index === step.user.index) {
+                        game.users[step.user.index].balance += field.price*0.5;
+                        socket.emit('changeBalance', field.price*0.5);
+                        field.owner = undefined;
+                        io.to('game').emit('updateGame', game);
                     }
                 }
             }
             break;
+
+            // case 'upgrade': {
+            //     if (!id) return socket.emit('error', 'id not found');
+            //     const field = game.fields[id]
+            //     if (!field) return socket.emit('error', 'filed not found');
+            //     if(field.type === 'object') {
+            //         if(field.owner?.index === step.user.index) {
+            //             if(field.price * 0.25 <= game.users[step.user.index].balance) {
+            //                 field.level += 1;
+            //                 game.users[step.user.index].balance -= field.price * 0.25;
+            //             }
+            //         }
+            //     }
+            // }
+            // break;
+
 
             case "payRent":
                 const cField = game.fields[game.users[step.user.index].positionFieldId];

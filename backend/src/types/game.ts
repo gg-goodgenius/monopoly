@@ -21,7 +21,8 @@ export interface Gamer {
     balance: number,
     positionFieldId: number,
     color: string,
-    currentStep: boolean
+    currentStep: boolean,
+    publicKey: string,
 }
 
 export interface Step {
