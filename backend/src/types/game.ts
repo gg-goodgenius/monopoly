@@ -11,17 +11,16 @@ export interface Game {
     fields: FieldsState
     status: StatusGame,
     bank: {},
-    users: Gamer[]
+    users: Gamer[],
+    dice: number[]
 }
 
 export interface Gamer {
     index: number,
     address: string,
     socketId: string,
-    name?: string,
     balance: number,
-    countSteps: number,
-    position: number,
+    positionFieldId: number,
 }
 
 export interface Step {

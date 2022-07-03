@@ -6,7 +6,7 @@ interface Field {
     type:
         'chest' |
         'tax' |
-        'railroad' |
+        // 'railroad' |
         'chance' |
         'start' |
         'object' |
@@ -24,10 +24,10 @@ export interface FieldTax extends Field {
 export interface FieldChest extends Field {
     type: 'chest'
 }
-export interface FieldRailroad extends Field {
-    type: 'railroad',
-    price: number
-}
+// export interface FieldRailroad extends Field {
+//     type: 'railroad',
+//     price: number
+// }
 export interface FieldChance extends Field {
     type: 'chance'
 }
@@ -36,7 +36,9 @@ export interface FieldObject extends Field {
     price: number,
     priceRent?: number,
     color: string,
-    owner?: Gamer,
+    owner?: {
+        index: number
+    },
     isOffer?: number,
     level?: FieldObjectLevel
 }
