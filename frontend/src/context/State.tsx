@@ -15,7 +15,7 @@ export const State = ({ children }: any) => {
         const myprofile = async () => {
             const dataProfile = await gameProfile()
             setProfile(dataProfile)
-            const socket = io('ws://localhost:3000?address=' + dataProfile.address + '&publicKey=' + dataProfile.keys.publicKey)
+            const socket = io(process.env.REACT_APP_SCHEME+'://'+ process.env.REACT_APP_BACKENDIP +'?address=' + dataProfile.address + '&publicKey=' + dataProfile.keys.publicKey)
             socket.on("connect", () => {
                 console.log("TONOPOLY: Connect to server via socket", socket.id);
             })
