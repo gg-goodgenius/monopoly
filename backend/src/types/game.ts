@@ -1,4 +1,4 @@
-import {FieldsState} from "../contatnts";
+import {FieldState} from "../contatnts";
 
 export enum StatusGame {
     PROCESS,
@@ -8,7 +8,7 @@ export enum StatusGame {
 
 export interface Game {
     nextStepSocketId?: string,
-    fields: FieldsState
+    fields: FieldState[]
     status: StatusGame,
     bank: {},
     users: Gamer[],

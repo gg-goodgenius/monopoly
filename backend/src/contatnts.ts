@@ -9,7 +9,7 @@ import {
 } from "./types/fields";
 
 
-export type FieldsState = (
+export type FieldState =
     FieldStart |
     FieldTax |
     FieldChest |
@@ -18,10 +18,9 @@ export type FieldsState = (
     FieldCourt |
     FieldObject |
     FieldFreeParking |
-    FieldCompany
-    )[];
+    FieldCompany;
 
-export const fields: FieldsState = [
+export const fields: FieldState[] = [
     {
         id: 0,
         name: 'GO',
