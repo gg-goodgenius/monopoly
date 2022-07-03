@@ -1,6 +1,6 @@
-import TonWeb from 'tonweb'
 
 const gameProfile =  async () => {
+    const TonWeb = require('tonweb')
     const tonweb = new TonWeb(new TonWeb.HttpProvider('https://testnet.toncenter.com/api/v2/jsonRPC', {apiKey: '75ce0190fa40d05f24ca4641a45b686cfe50715a1e3c859bc698157c03b36eac'}));
     const nacl = tonweb.utils.nacl;
     const secret:any = localStorage.getItem("tonopoly_secret")
@@ -13,7 +13,7 @@ const gameProfile =  async () => {
         const shortAddress = address.slice(0, 8) + "..." + address.slice(-5)
         const balance = tonweb.utils.fromNano(await tonweb.getBalance(address))
         console.log("TONOPOLY: Wallet was loaded",wallet, keyPair, address, balance, shortAddress)
-        return {wallet, keys: keyPair, address, balance, shortAddress}
+        return {wallet, keys: keyPair, address, balance, shortAddress, tonweb}
     } else {
         const newKeyPair = TonWeb.utils.nacl.sign.keyPair()
         const wallet = tonweb.wallet.create({publicKey: newKeyPair.publicKey, wc: 0});
@@ -22,7 +22,7 @@ const gameProfile =  async () => {
         const shortAddress = address.slice(0, 8) + "..." + address.slice(-5)
         const balance = tonweb.utils.fromNano(await tonweb.getBalance(address))
         console.log("TONOPOLY: Wallet was created",wallet, newKeyPair, address, balance, shortAddress)
-        return {wallet, keys: newKeyPair, address, balance, shortAddress}
+        return {wallet, keys: newKeyPair, address, balance, shortAddress, tonweb}
     }
 }
 
