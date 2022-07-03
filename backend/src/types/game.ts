@@ -7,7 +7,6 @@ export enum StatusGame {
 
 
 export interface Game {
-    nextStepSocketId?: string,
     fields: FieldState[]
     status: StatusGame,
     bank: {},
@@ -21,7 +20,8 @@ export interface Gamer {
     socketId: string,
     balance: number,
     positionFieldId: number,
-    color: string
+    color: string,
+    currentStep: boolean
 }
 
 export interface Step {
