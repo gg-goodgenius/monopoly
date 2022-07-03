@@ -11,6 +11,7 @@ export interface ClientToServerEvents {
     getCurrentOnline: () => void,
     joinGame: () => void,
     startGame: () => void,
+    finishGame: () => void,
     startStep: () => void,
     doActionStep: (type: 'buy' | 'offer' | 'sell' | 'payRent', id?: number) => void,
     finishStep: () => void

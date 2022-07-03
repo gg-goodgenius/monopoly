@@ -37,14 +37,14 @@ let countOnline = 0;
 
 io.on('connection', async (socket) => {
     const address = socket.handshake.query.address as string;
-    if(!address)
+    if (!address)
         return socket.disconnect(true);
 
     countOnline += 1;
 
-    if(game.status === StatusGame.PROCESS) {
+    if (game.status === StatusGame.PROCESS) {
         const i = game.users.findIndex(u => u.address === address);
-        if(i > -1) {
+        if (i > -1) {
             game.users[i].socketId = socket.id;
         }
     }
@@ -88,6 +88,20 @@ io.on('connection', async (socket) => {
             return socket.emit('error', 'Very few people')
     })
 
+    socket.on('finishGame', () => {
+       step = null;
+       game = {
+           fields: fields,
+           users: [],
+           bank: {
+               address: ''
+           },
+           status: StatusGame.WAITING,
+           dice: [0, 0]
+       };
+       io.socketsLeave('game');
+    });
+
     socket.on('startStep', () => {
         if (game.status === StatusGame.WAITING) return socket.emit('error', 'Game not started yet');
         if (step) return socket.emit('error', 'Step already started')
@@ -114,28 +128,35 @@ io.on('connection', async (socket) => {
         // const user = game.users.find(u => u.address === address);
         if (game.status === StatusGame.WAITING) return socket.emit('error', 'Game not started yet');
         if (!step) return socket.emit('error', 'Step not already started yet');
-        // if(!user) return;
         switch (type) {
-            case "buy":
+            case "buy": {
                 const field = game.fields[step.user.positionFieldId];
-                if(field.type === 'object') {
-                    if(!field.owner) {
+                if (field.type === 'object') {
+                    if (!field.owner) {
                         if (field.price <= step.user.balance) {
-                            field.owner = { index: step.user.index };
+                            field.owner = {index: step.user.index};
                             step.user.balance -= field.price;
                             socket.emit('changeBalance', -field.price);
                             io.to('game').emit('updateGame', game);
                         } else return socket.emit('error', 'Money is tight');
                     } else return socket.emit('error', 'Field already purchased')
                 }
-                break;
+            }
+            break;
+
+            case "sell": {
+                if (!id) return socket.emit('error', 'id not found');
+                const field = game.fields[id]
+                if (!game.fields[id]) return socket.emit('error', 'filed not found')
+            }
+            break;
 
             case "payRent":
                 const cField = game.fields[game.users[step.user.index].positionFieldId];
-                if(cField.type !== 'object') return socket.emit('error', 'You don\'t have to pay rent')
+                if (cField.type !== 'object') return socket.emit('error', 'You don\'t have to pay rent')
                 if (cField.owner) {
-                    if(cField.owner.index !== step.user.index) {
-                        const priceRent = (cField.level || 1)*0.25 * cField.price;
+                    if (cField.owner.index !== step.user.index) {
+                        const priceRent = (cField.level || 1) * 0.25 * cField.price;
                         game.users[step.user.index].balance -= priceRent;
                         socket.emit('changeBalance', -priceRent);
                         game.users[cField.owner.index].balance += priceRent;
