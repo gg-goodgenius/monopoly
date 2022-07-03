@@ -159,7 +159,8 @@ io.on('connection', async (socket) => {
                     balanceB: STARTBALANCE,
                     seqnoA: 0,
                     seqnoB: 0,
-                    obj: channelA
+                    obj: channelA,
+                    fromWallet: fromWalletA
                 }
 
                 socket.emit('initChannel', {
@@ -178,7 +179,7 @@ io.on('connection', async (socket) => {
 
     socket.on('finishGame', async (state: any, sign: any) => {
         for(const user of game.users) {
-            await user.channel.obj.close({
+            await user.channel.fromWallet.close({
                 ...state,
                 hisSignature: sign
             }).send(toNano('0.05'));
