@@ -136,7 +136,7 @@ io.on('connection', async (socket) => {
               
               await sleep(6000)
 
-              socket.emit('updateChannel', {
+              socket.emit('initChannel', {
                 channelId: channelConfig.channelId,
                 publicKey: keyPairA.publicKey,
                 address: await walletA.getAddress()
