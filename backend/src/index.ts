@@ -145,9 +145,6 @@ io.on('connection', async (socket) => {
                     publicKey: keyPairA.publicKey
                 });
                 const hexPublicKey = tonweb.utils.bytesToHex(keyPairA.publicKey)
-
-
-
                 await sleep(7000)
                 console.log(await channelA.getChannelState());
                 const data = await channelA.getData();
@@ -156,7 +153,7 @@ io.on('connection', async (socket) => {
                 const channelAddress = await channelA.getAddress(); // address of this payment channel smart-contract in blockchain
                 console.log('channelAddress=', channelAddress.toString(true, true, true));
                 console.log("BALANCE DATA:", data);
-                
+
                 user.channel = {
                     balanceA: STARTBALANCE,
                     balanceB: STARTBALANCE,
@@ -179,9 +176,14 @@ io.on('connection', async (socket) => {
             return socket.emit('error', 'Very few people')
     })
 
-    socket.on('finishGame', () => {
-
-        step = null;
+    socket.on('finishGame', async (state: any, sign: any) => {
+        for(const user of game.users) {
+            await user.channel.obj.close({
+                ...state,
+                hisSignature: sign
+            }).send(toNano('0.05'));
+        }
+        step =  null;
         game = {
             fields: fields,
             users: [],
@@ -232,7 +234,7 @@ io.on('connection', async (socket) => {
                             step.user.channel.balanceB -= field.price
                             step.user.channel.seqnoB += 1
                             console.log(step.user.channel);
-                            
+
                             const channelState = {
                                 balanceA: toNano(step.user.channel.balanceA.toString()),
                                 balanceB: toNano(step.user.channel.balanceB.toString()),
@@ -241,7 +243,7 @@ io.on('connection', async (socket) => {
                             };
                             const signatureA = await step.user.channel.obj.signState(channelState)
                             console.log(signatureA);
-                            
+
                             socket.emit('changeBalance', channelState);
                             io.to('game').emit('updateGame', game);
                         } else return socket.emit('error', 'Money is tight');

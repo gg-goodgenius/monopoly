@@ -1,13 +1,6 @@
 import {Game} from "./game";
 
 
-interface ChannelState {
-    balanceA: number,
-    balanceB: number,
-    seqnoA: number,
-    seqnoB: number
-}
-
 export interface ServerToClientEvents {
     updateCurrentOnline: (countOnline: number) => void
     error: (msg: string) => void
@@ -21,7 +14,7 @@ export interface ClientToServerEvents {
     getCurrentOnline: () => void,
     joinGame: () => void,
     startGame: () => void,
-    finishGame: () => void,
+    finishGame: (state: any, sign: any) => void,
     startStep: () => void,
     doActionStep: (type: 'buy' | 'upgrade' | 'sell' | 'payRent', id?: number) => void,
     finishStep: () => void
