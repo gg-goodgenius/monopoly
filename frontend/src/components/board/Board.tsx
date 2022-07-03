@@ -48,15 +48,15 @@ function Board() {
 						<JailField {...gameState?.fields[10]} />
 
 						<div className="row vertical-row left-row">
-							<ObjectField {...gameState?.fields[11]} />
-							<SharedField electric={true} {...gameState?.fields[12]}/>
-							<ObjectField {...gameState?.fields[13]} />
-							<ObjectField {...gameState?.fields[14]} />
-							<RailRoadField {...gameState?.fields[15]} />
-							<ObjectField {...gameState?.fields[16]} />
-							<ChestField {...gameState?.fields[17]}/>
-							<ObjectField {...gameState?.fields[8]} />
 							<ObjectField {...gameState?.fields[19]} />
+							<ObjectField {...gameState?.fields[18]} />
+							<ChestField {...gameState?.fields[17]}/>
+							<ObjectField {...gameState?.fields[16]} />
+							<RailRoadField {...gameState?.fields[15]} />
+							<ObjectField {...gameState?.fields[14]} />
+							<ObjectField {...gameState?.fields[13]} />
+							<SharedField electric={true} {...gameState?.fields[12]}/>
+							<ObjectField {...gameState?.fields[11]} />
 						</div>
 
 						<ParkingField {...gameState?.fields[20]}/>

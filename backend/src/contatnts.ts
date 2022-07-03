@@ -31,7 +31,8 @@ export const fields: FieldState[] = [
         color: "dark-purple",
         name: "MEDITER-RANEAN AVENUE",
         price: 0.5,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
     {
         id: 2,
@@ -43,7 +44,9 @@ export const fields: FieldState[] = [
         color: "dark-purple",
         name: "BALTIC AVENUE",
         price: 0.5,
-        type: 'object'
+        type: 'object',
+        level: 0
+        
     },
     {
         id: 4,
@@ -56,21 +59,24 @@ export const fields: FieldState[] = [
         name: "READING RAILROAD",
         price: 2,
         type: 'object',
-        color: 'black'
+        color: 'black',
+        level: 0
     },
     {
         id: 6,
         name: "ORENTAL AVENUE",
         price: 1,
         type: 'object',
-        color: 'light-blue'
+        color: 'light-blue',
+        level: 0
     },
     {
         id: 7,
         color: "light-blue",
         name: "VERMONT AVENUE",
         price: 1,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
     {
         id: 8,
@@ -82,7 +88,8 @@ export const fields: FieldState[] = [
         color: "light-blue",
         name: "CONNECTICUT AVENUE",
         price: 1.2,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
     {
         id: 10,
@@ -94,7 +101,8 @@ export const fields: FieldState[] = [
         color: "purple",
         name: "ST. CHARLES PLACE",
         price: 1.4,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
     {
         id: 12,
@@ -107,28 +115,32 @@ export const fields: FieldState[] = [
         color: "purple",
         name: "STATES AVENUE",
         price: 1.4,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
     {
         id: 14,
         color: "purple",
         name: "VIRGINIA AVENUE",
         price: 1.6,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
     {
         id: 15,
         name: 'Railroad',
         type: 'object',
         color: 'black',
-        price: 2
+        price: 2,
+        level: 0
     },
     {
         id: 16,
         color: "orange",
         name: "ST. JAMES AVENUE",
         price: 1.8,
-        type: 'object'
+        type: 'object',
+        level: 0
         
     },
     {
@@ -141,14 +153,16 @@ export const fields: FieldState[] = [
         color: "orange",
         name: "TENNESSEE AVENUE",
         price: 1.8,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
     {
         id: 19,
         color: "orange",
         name: "NEW YORK AVENUE",
         price: 2,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
     {
         id: 20,
@@ -160,7 +174,8 @@ export const fields: FieldState[] = [
         color: "red",
         name: "KENTUCKY AVENUE",
         price: 2.2,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
     {
         id: 22,
@@ -172,14 +187,16 @@ export const fields: FieldState[] = [
         color: "red",
         name: "INDIANA AVENUE",
         price: 2.2,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
     {
         id: 24,
         color: "red",
         name: "ILLINOIS AVENUE",
         price: 2,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
     {
         id: 25,
@@ -193,14 +210,16 @@ export const fields: FieldState[] = [
         color: "yellow",
         name: "ATLANTIC AVENUE",
         price: 2.6,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
     {
         id: 27,
         color: "yellow",
         name: "VENTNOR AVENUE",
         price: 2.6,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
     {
         id: 28,
@@ -213,7 +232,8 @@ export const fields: FieldState[] = [
         color: "yellow",
         name: "MARVIN GARDENS",
         price: 2.8,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
     {
         id: 30,
@@ -225,7 +245,8 @@ export const fields: FieldState[] = [
         color: "green",
         name: "PACIFIC AVENUE",
         price: 3,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
    
     {
@@ -233,7 +254,8 @@ export const fields: FieldState[] = [
         color: "green",
         name: "NORTH CAROLINA AVENUE",
         price: 3,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
     {
         id: 33,
@@ -245,7 +267,8 @@ export const fields: FieldState[] = [
         color: "green",
         name: "PENNSYLVANIA AVENUE",
         price: 3.2,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
     {
         id: 35,
@@ -264,7 +287,8 @@ export const fields: FieldState[] = [
         color: "dark-blue",
         name: "PARK PLACE",
         price: 3.5,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
     {
         id: 38,
@@ -277,7 +301,8 @@ export const fields: FieldState[] = [
         color: "dark-blue",
         name: "BOARDWALK",
         price: 4,
-        type: 'object'
+        type: 'object',
+        level: 0
     },
 ];
 
