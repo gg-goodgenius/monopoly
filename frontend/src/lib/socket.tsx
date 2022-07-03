@@ -1,7 +1,7 @@
 import { io } from "socket.io-client"
 
 
-export const initialSocket = (url:string) => {
+export const initialSocket = async (url:string) => {
     const socket = io(url)
 
     socket.on("connect", ()=> {
@@ -14,10 +14,7 @@ export const initialSocket = (url:string) => {
 
     socket.on("updateCurrentOnline", (data: any)=>{
         console.log("TONOPOLY: Update current online gamers", data);
-    })
 
-    socket.on("updateCurrentOnline", (data: any)=>{
-        console.log("TONOPOLY: Update current online gamers", data);
     })
 
     socket.on("updateGame", (data: any)=>{

@@ -64,10 +64,12 @@ export const State = ({children}: any) => {
         const myprofile = async () => {
             const data = await gameProfile()
             setProfile(data)
-            setSocket(initialSocket('ws://localhost:3000?address=' + data.address))
+            const dataSocket = await initialSocket('ws://localhost:3000?address=' + data.address)
+            setSocket(dataSocket)
+            setCubes([0, 0])
         }
         myprofile();
-        setCubes([0, 0])
+        
     }, [])
 
     return (
@@ -81,6 +83,8 @@ export const State = ({children}: any) => {
                 setListGamers,
                 myCards,
                 setMyCards,
+                socket,
+                setSocket
             }}
         >
             {children}
