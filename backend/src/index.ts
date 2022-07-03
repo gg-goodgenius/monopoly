@@ -103,8 +103,8 @@ io.on('connection', async (socket) => {
             game.status = StatusGame.PROCESS;
             game.users[0].currentStep = true;
             io.to('game').emit('updateGame', game);
-
-            game.users.forEach(async user => {
+            
+            for (const user of game.users) {
               const channelInitState = {
                   balanceA: toNano('15'),
                   balanceB: toNano('15'),
@@ -135,7 +135,7 @@ io.on('connection', async (socket) => {
               await fromWalletA.deploy().send(toNano('0.05'))
               
               await sleep(6000)
-
+              
               socket.emit('updateChannel', {
                 channelId: channelConfig.channelId,
                 publicKey: keyPairA.publicKey,
@@ -145,8 +145,7 @@ io.on('connection', async (socket) => {
               await fromWalletA
                   .topUp({ coinsA: channelInitState.balanceA, coinsB: new BN(0) })
                   .send(channelInitState.balanceA.add(toNano('0.05')))
-            })
-            
+            }
         } else
             return socket.emit('error', 'Very few people')
     })
