@@ -25,7 +25,7 @@ interface objectType {
 function Board() {
 	const { gameState } = useContext(StateContext)
 	console.log(gameState);
-	
+
 	return (
 		<>
 			{gameState?.fields &&
@@ -35,13 +35,13 @@ function Board() {
 						<StartField {...gameState.fields[0]} />
 						<div className="row horizontal-row bottom-row">
 							<ObjectField {...gameState?.fields[9]} />
-							<ChanceField {...gameState?.fields[8]}/>
+							<ChanceField {...gameState?.fields[8]} />
 							<ObjectField {...gameState?.fields[7]} />
 							<ObjectField {...gameState?.fields[6]} />
 							<RailRoadField {...gameState?.fields[5]} />
-							<TaxField lux={false} {...gameState?.fields[4]}/>
+							<TaxField lux={false} {...gameState?.fields[4]} />
 							<ObjectField {...gameState?.fields[3]} />
-							<ChestField {...gameState?.fields[2]}/>
+							<ChestField {...gameState?.fields[2]} />
 							<ObjectField {...gameState?.fields[1]} />
 						</div>
 
@@ -50,40 +50,40 @@ function Board() {
 						<div className="row vertical-row left-row">
 							<ObjectField {...gameState?.fields[19]} />
 							<ObjectField {...gameState?.fields[18]} />
-							<ChestField {...gameState?.fields[17]}/>
+							<ChestField {...gameState?.fields[17]} />
 							<ObjectField {...gameState?.fields[16]} />
 							<RailRoadField {...gameState?.fields[15]} />
 							<ObjectField {...gameState?.fields[14]} />
 							<ObjectField {...gameState?.fields[13]} />
-							<SharedField electric={true} {...gameState?.fields[12]}/>
+							<SharedField electric={true} {...gameState?.fields[12]} />
 							<ObjectField {...gameState?.fields[11]} />
 						</div>
 
-						<ParkingField {...gameState?.fields[20]}/>
+						<ParkingField {...gameState?.fields[20]} />
 
 						<div className="row horizontal-row top-row">
 							<ObjectField {...gameState?.fields[21]} />
-							<ChanceField {...gameState?.fields[22]}/>
+							<ChanceField {...gameState?.fields[22]} />
 							<ObjectField {...gameState?.fields[23]} />
 							<ObjectField {...gameState?.fields[24]} />
 							<RailRoadField {...gameState?.fields[25]} />
 							<ObjectField {...gameState?.fields[26]} />
 							<ObjectField {...gameState?.fields[27]} />
-							<SharedField electric={false} {...gameState?.fields[28]}/>
+							<SharedField electric={false} {...gameState?.fields[28]} />
 							<ObjectField {...gameState?.fields[29]} />
 						</div>
 
-						<GoJailField {...gameState?.fields[30]}/>
+						<GoJailField {...gameState?.fields[30]} />
 
 						<div className="row vertical-row right-row">
 							<ObjectField {...gameState?.fields[31]} />
 							<ObjectField {...gameState?.fields[32]} />
-							<ChestField {...gameState?.fields[33]}/>
+							<ChestField {...gameState?.fields[33]} />
 							<ObjectField {...gameState?.fields[34]} />
 							<RailRoadField {...gameState?.fields[35]} />
-							<ChanceField {...gameState?.fields[36]}/>
+							<ChanceField {...gameState?.fields[36]} />
 							<ObjectField {...gameState?.fields[37]} />
-							<TaxField lux={true} {...gameState?.fields[38]}/>
+							<TaxField lux={true} {...gameState?.fields[38]} />
 							<ObjectField {...gameState?.fields[39]} />
 						</div>
 					</div>
@@ -91,7 +91,14 @@ function Board() {
 			}
 			{!gameState?.fields &&
 				<div className="messageWait">
-					Wait start game
+					<h1 className="title">
+							<div className="drawing fa fa-diamond"></div>
+							TONOPOLY
+							<div className="drawing fa fa-diamond"></div>
+							<div>
+							Wait start game
+							</div>
+						</h1>
 				</div>
 			}
 		</>

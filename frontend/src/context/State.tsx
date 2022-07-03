@@ -86,10 +86,10 @@ export const State = ({ children }: any) => {
                     await fromWallet
                         .topUp({ coinsA: new BN(0), coinsB: channelInitState.balanceB })
                         .send(channelInitState.balanceB.add(toNano('0.05')));
-
+                    return (await channel.getAddress()).toString()
                 }
-                updateBalance()
-                setPayment({ channel, fromWallet })
+                const address = updateBalance()
+                setPayment({ channel, address, fromWallet })
             }
             )
             setSocket(socket)
