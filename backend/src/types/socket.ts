@@ -4,6 +4,7 @@ export interface ServerToClientEvents {
     updateCurrentOnline: (countOnline: number) => void
     error: (msg: string) => void
     updateGame: (game: Game) => void
+    changeBalance: (diff: number) => void
 }
 
 export interface ClientToServerEvents {
@@ -11,6 +12,6 @@ export interface ClientToServerEvents {
     joinGame: () => void,
     startGame: () => void,
     startStep: () => void,
-    doActionStep: () => void,
+    doActionStep: (type: 'buy' | 'offer' | 'sell', id?: number) => void,
     finishStep: () => void
 }

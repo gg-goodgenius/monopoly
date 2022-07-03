@@ -4,7 +4,6 @@ import {
     FieldCourt, FieldCompany, FieldFreeParking,
     FieldJail,
     FieldObject,
-    FieldRailroad,
     FieldStart,
     FieldTax
 } from "./types/fields";
@@ -17,7 +16,6 @@ export type FieldsState = (
     FieldChance |
     FieldJail |
     FieldCourt |
-    FieldRailroad |
     FieldObject |
     FieldFreeParking |
     FieldCompany
@@ -58,7 +56,8 @@ export const fields: FieldsState = [
         id: 5,
         name: "READING RAILROAD",
         price: 2,
-        type: 'railroad'
+        type: 'object',
+        color: 'black'
     },
     {
         id: 6,
@@ -120,7 +119,8 @@ export const fields: FieldsState = [
     {
         id: 14,
         name: 'Railroad',
-        type: 'railroad',
+        type: 'object',
+        color: 'black',
         price: 2
     },
     {
@@ -184,7 +184,8 @@ export const fields: FieldsState = [
     {
         id: 24,
         name: 'Railway',
-        type: 'railroad',
+        type: 'object',
+        color: 'black',
         price: 2
     },
     {
@@ -254,7 +255,8 @@ export const fields: FieldsState = [
     },
     {
         id: 35,
-        type: 'railroad',
+        type: 'object',
+        color: 'black',
         name: 'SHORT LINE',
         price: 2
     },

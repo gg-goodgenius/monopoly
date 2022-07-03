@@ -26,8 +26,11 @@ app.use('/', (req, res) => {
 let game: Game = {
     fields: fields,
     users: [],
-    bank: {},
+    bank: {
+        address: ''
+    },
     status: StatusGame.WAITING,
+    dice: [0, 0]
 };
 let step: Step | null = null;
 let countOnline = 0;
@@ -67,9 +70,8 @@ io.on('connection', async (socket) => {
                 index: game.users.length,
                 address: address,
                 socketId: socket.id,
-                balance: 0,
-                position: 0,
-                countSteps: 0,
+                balance: 15,
+                positionFieldId: 0,
             });
             socket.join('game');
             io.to('game').emit('updateGame', game);
@@ -96,24 +98,65 @@ io.on('connection', async (socket) => {
                     user: user,
                     countActions: 0
                 }
-                const randomVal = generateRandomInteger(2, 12);
-                game.users[user.index].countSteps += 1;
-                if ((game.users[user.index].position + randomVal) > 39) {
-                    game.users[user.index].position += (game.users[user.index].position + randomVal) - 40;
+                game.dice[0] = generateRandomInteger(1, 6);
+                game.dice[1] = generateRandomInteger(1, 6);
+                const randomVal = game.dice[0] + game.dice[1]
+                if ((game.users[user.index].positionFieldId + randomVal) > 39) {
+                    game.users[user.index].positionFieldId += (game.users[user.index].positionFieldId + randomVal) - 40;
                 } else
-                    game.users[user.index].position += randomVal;
+                    game.users[user.index].positionFieldId += randomVal;
 
-                const cField = game.fields[game.users[user.index].position];
+                const cField = game.fields[game.users[user.index].positionFieldId];
                 if (cField) {
-                    if (cField.type === 'object') {
-                        if (cField.owner) {
-                            //TODO pay rent to owner
-                        }
+                    switch (cField.type) {
+                        case "object":
+                            if (cField.owner) {
+                                if(cField.owner.index !== user.index) {
+                                    //TODO rendPrice
+                                    game.users[user.index].balance -= cField.priceRent ?? 2;
+                                    socket.emit('changeBalance', -2);
+                                    game.users[cField.owner.index].balance += cField.priceRent ?? 2;
+                                    io.to(game.users[cField.owner.index].socketId).emit('changeBalance', 2);
+                                }
+                            }
+                            break;
+                        case "tax":
+                            //TODO pay tax
+                            break;
+                        case "company":
+                            //TODO pay to user
+                            break;
+                        case "court":
+                            //TODO todo?
+                            break;
+
                     }
                 }
             }
         }
     });
+
+    socket.on('doActionStep', (type, id) => {
+        // const user = game.users.find(u => u.address === address);
+        if (game.status === StatusGame.WAITING) return socket.emit('error', 'Game not started yet');
+        if (!step) return socket.emit('error', 'Step not already started yet');
+        // if(!user) return;
+        switch (type) {
+            case "buy":
+                const field = game.fields[step.user.positionFieldId];
+                if(field.type === 'object') {
+                    if(!field.owner) {
+                        if (field.price <= step.user.balance) {
+                            field.owner = { index: step.user.index };
+                            step.user.balance -= field.price;
+                            socket.emit('changeBalance', -field.price);
+                            io.to('game').emit('updateGame', game);
+                        } else return socket.emit('error', 'Money is tight');
+                    } else return socket.emit('error', 'Field already purchased')
+                }
+                break;
+        }
+    })
 
     socket.on('finishStep', () => {
         if (game.status === StatusGame.WAITING) return socket.emit('error', 'Game not started yet');
