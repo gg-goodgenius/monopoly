@@ -16,9 +16,9 @@ function App() {
         <div className="gamePanel">
           <div className='gameSubPanel'>
             <Cubes />
-            <ActionPanel />
             <WalletInfo />
             <GamersList />
+            <ActionPanel />
           </div>
           <div className='gameSubPanel'>
             <CardsList />

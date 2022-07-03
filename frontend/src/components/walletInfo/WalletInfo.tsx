@@ -5,8 +5,8 @@ import { StateContext } from './../../context/State'
 
 
 function WalletInfo() {
-    const { profile } = useContext<any>(StateContext)
-
+    const { profile, user } = useContext<any>(StateContext)
+    const color = user ? user.color : "#fff"    
     return (
         <div className="panel">
             <div className="header">
@@ -14,7 +14,7 @@ function WalletInfo() {
             </div>
             {profile &&
                 <>
-                    <div>
+                    <div style={{color:color}}>
                         Address: {profile && profile.shortAddress}
                     </div>
                     <div>
