@@ -1,11 +1,9 @@
+import UserLabel from '../UserLabel/UserLabel';
 
-interface railRoadProps {
-	name: string;
-}
-
-function RailRoadField(props:railRoadProps) {
+function RailRoadField(props:any) {
 	return (
 		<div className="space railroad">
+			<UserLabel id={props.id} />
 			<div className="container">
 				<div className="name">{props.name}</div>
 				<i className="drawing fa fa-subway"></i>

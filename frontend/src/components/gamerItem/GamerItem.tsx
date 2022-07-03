@@ -3,18 +3,18 @@ import './GamerItem.css'
 
 function GamerItem(props: any) {
     const is_active: string = props.active ? "active " : ""
-
     const handleBuy = () => {
         // send requests for back
         // send ton to bank
     }
-
     return (
         <div key={props.name}>
-            <div className={is_active + "gamerItem"} >
-                {props.name} - {props.balance} TON
+            { props.currentStep && 
+            <span>X</span>}
+            <div className={is_active + "gamerItem"} style={{color:props.color}}>
+                {props.address.slice(0,5)}...{props.address.slice(-8)} - {props.balance} TON
             </div>
-            {props.offers &&
+            {props.offers && 
                 <div>
                     Offers:
                     {

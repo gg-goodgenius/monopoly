@@ -11,6 +11,9 @@ import SharedField from '../fields/Shared/Shared';
 import StartField from '../fields/Start/Start';
 import TaxField from '../fields/Tax/Tax';
 import './Board.css';
+import { useContext } from 'react'
+import { StateContext } from './../../context/State'
+
 
 interface objectType {
 	color: string;
@@ -20,186 +23,78 @@ interface objectType {
 
 
 function Board() {
-	const cards: objectType[] = [
-		{
-			color: "dark-purple",
-			name: "MEDITER-RANEAN AVENUE",
-			price: 0.5,
-		},
-		{
-			color: "dark-purple",
-			name: "BALTIC AVENUE",
-			price: 0.5,
-		},
-		{
-			color: "light-blue",
-			name: "ORIENTAL AVENUE",
-			price: 1,
-		},
-		{
-			color: "light-blue",
-			name: "VERMONT AVENUE",
-			price: 1,
-		},
-		{
-			color: "light-blue",
-			name: "CONNECTICUT AVENUE",
-			price: 1.2,
-		},
-		{
-			color: "purple",
-			name: "ST. CHARLES PLACE",
-			price: 1.4,
-		},
-		{
-			color: "purple",
-			name: "STATES AVENUE",
-			price: 1.4,
-		},
-		{
-			color: "purple",
-			name: "VIRGINIA AVENUE",
-			price: 1.6,
-		},
-		{
-			color: "orange",
-			name: "ST. JAMES AVENUE",
-			price: 1.8,
-		},
-		{
-			color: "orange",
-			name: "TENNESSEE AVENUE",
-			price: 1.8,
-		},
-		{
-			color: "orange",
-			name: "NEW YORK AVENUE",
-			price: 2,
-		},
-		{
-			color: "red",
-			name: "KENTUCKY AVENUE",
-			price: 2.2,
-		},
-		{
-			color: "red",
-			name: "INDIANA AVENUE",
-			price: 2.2,
-		},
-		{
-			color: "red",
-			name: "ILLINOIS AVENUE",
-			price: 2,
-		},
-		{
-			color: "yellow",
-			name: "ATLANTIC AVENUE",
-			price: 2.6,
-		},
-		{
-			color: "yellow",
-			name: "VENTNOR AVENUE",
-			price: 2.6,
-		},
-		{
-			color: "yellow",
-			name: "MARVIN GARDENS",
-			price: 2.8,
-		},
-		{
-			color: "green",
-			name: "PACIFIC AVENUE",
-			price: 3,
-		},
-		{
-			color: "green",
-			name: "NORTH CAROLINA AVENUE",
-			price: 3,
-		},
-		{
-			color: "green",
-			name: "PENNSYLVANIA AVENUE",
-			price: 3.2,
-		},
-		{
-			color: "dark-blue",
-			name: "PARK PLACE",
-			price: 3.5,
-		},
-		{
-			color: "dark-blue",
-			name: "BOARDWALK",
-			price: 4,
-		},
-	]
-	const railroads: string[] = [
-		'READING RAILROAD',
-		'PENNSYLVANIA RAILROAD',
-		'B & O RAILROAD',
-		'SHORT LINE'
-	]
+	const { gameState } = useContext(StateContext)
+	console.log(gameState);
+	
 	return (
-		<div className="table">
-			<div className="board">
-				<CenterField />
-				<StartField />
+		<>
+			{gameState?.fields &&
+				<div className="table">
+					<div className="board">
+						<CenterField />
+						<StartField {...gameState.fields[0]} />
+						<div className="row horizontal-row bottom-row">
+							<ObjectField {...gameState?.fields[9]} />
+							<ChanceField {...gameState?.fields[8]}/>
+							<ObjectField {...gameState?.fields[7]} />
+							<ObjectField {...gameState?.fields[6]} />
+							<RailRoadField {...gameState?.fields[5]} />
+							<TaxField lux={false} {...gameState?.fields[4]}/>
+							<ObjectField {...gameState?.fields[3]} />
+							<ChestField {...gameState?.fields[2]}/>
+							<ObjectField {...gameState?.fields[1]} />
+						</div>
 
+						<JailField {...gameState?.fields[10]} />
 
-				<div className="row horizontal-row bottom-row">
-					<ObjectField {...cards[4]} />
-					<ChanceField />
-					<ObjectField {...cards[3]} />
-					<ObjectField {...cards[2]} />
-					<RailRoadField name={railroads[0]} />
-					<TaxField lux={false} />
-					<ObjectField {...cards[1]} />
-					<ChestField />
-					<ObjectField {...cards[0]} />
+						<div className="row vertical-row left-row">
+							<ObjectField {...gameState?.fields[11]} />
+							<SharedField electric={true} {...gameState?.fields[12]}/>
+							<ObjectField {...gameState?.fields[13]} />
+							<ObjectField {...gameState?.fields[14]} />
+							<RailRoadField {...gameState?.fields[15]} />
+							<ObjectField {...gameState?.fields[16]} />
+							<ChestField {...gameState?.fields[17]}/>
+							<ObjectField {...gameState?.fields[8]} />
+							<ObjectField {...gameState?.fields[19]} />
+						</div>
+
+						<ParkingField {...gameState?.fields[20]}/>
+
+						<div className="row horizontal-row top-row">
+							<ObjectField {...gameState?.fields[21]} />
+							<ChanceField {...gameState?.fields[22]}/>
+							<ObjectField {...gameState?.fields[23]} />
+							<ObjectField {...gameState?.fields[24]} />
+							<RailRoadField {...gameState?.fields[25]} />
+							<ObjectField {...gameState?.fields[26]} />
+							<ObjectField {...gameState?.fields[27]} />
+							<SharedField electric={false} {...gameState?.fields[28]}/>
+							<ObjectField {...gameState?.fields[29]} />
+						</div>
+
+						<GoJailField {...gameState?.fields[30]}/>
+
+						<div className="row vertical-row right-row">
+							<ObjectField {...gameState?.fields[31]} />
+							<ObjectField {...gameState?.fields[32]} />
+							<ChestField {...gameState?.fields[33]}/>
+							<ObjectField {...gameState?.fields[34]} />
+							<RailRoadField {...gameState?.fields[35]} />
+							<ChanceField {...gameState?.fields[36]}/>
+							<ObjectField {...gameState?.fields[37]} />
+							<TaxField lux={true} {...gameState?.fields[38]}/>
+							<ObjectField {...gameState?.fields[39]} />
+						</div>
+					</div>
 				</div>
-
-				<JailField />
-
-				<div className="row vertical-row left-row">
-					<ObjectField {...cards[5]} />
-					<SharedField electric={true} />
-					<ObjectField {...cards[6]} />
-					<ObjectField {...cards[7]} />
-					<RailRoadField name={railroads[1]} />
-					<ObjectField {...cards[8]} />
-					<ChestField />
-					<ObjectField {...cards[9]} />
-					<ObjectField {...cards[10]} />
+			}
+			{!gameState?.fields &&
+				<div className="messageWait">
+					Wait start game
 				</div>
-
-				<ParkingField />
-
-				<div className="row horizontal-row top-row">
-					<ObjectField {...cards[11]} />
-					<ChanceField />
-					<ObjectField {...cards[12]} />
-					<ObjectField {...cards[13]} />
-					<RailRoadField name={railroads[2]} />
-					<ObjectField {...cards[14]} />
-					<ObjectField {...cards[15]} />
-					<SharedField electric={false} />
-					<ObjectField {...cards[16]} />
-				</div>
-
-				<GoJailField />
-
-				<div className="row vertical-row right-row">
-					<ObjectField {...cards[17]} />
-					<ObjectField {...cards[18]} />
-					<ChestField />
-					<ObjectField {...cards[19]} />
-					<RailRoadField name={railroads[3]} />
-					<ChanceField />
-					<ObjectField {...cards[20]} />
-					<TaxField lux={true} />
-					<ObjectField {...cards[21]} />
-				</div>
-			</div>
-		</div>
+			}
+		</>
 	);
 }
 

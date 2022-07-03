@@ -1,7 +1,10 @@
-function ParkingField() {
+import UserLabel from '../UserLabel/UserLabel';
 
+
+function ParkingField(props:any) {
     return (
         <div className="space corner free-parking">
+            <UserLabel id={props.id} />
             <div className="container">
                 <div className="name">Free</div>
                 <i className="drawing fa fa-car"></i>
@@ -9,7 +12,6 @@ function ParkingField() {
             </div>
         </div>
     )
-
 }
 
 export default ParkingField;

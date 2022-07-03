@@ -1,5 +1,23 @@
   
-  h1, h2, h3, h4, h5, h6 {
+ .messageWait {
+	display: flex;
+	width: 100vh;
+	height: 100vh;
+	font-size: 36pt;
+	align-items: center;
+	justify-content: center;
+
+ } 
+
+ .label {
+	position: absolute;
+ }
+ .labelUser {
+	width: 16px;
+	height: 16px;
+ }
+ 
+ h1, h2, h3, h4, h5, h6 {
 	margin: 0;
   }
   
@@ -72,6 +90,7 @@
   }
   
   .community-chest-deck {
+	position: relative;
 	grid-column: 2/4;
 	grid-row: 2/4;
 	transform: rotate(135deg);
@@ -80,6 +99,7 @@
   }
   
   .chance-deck {
+	position: relative;
 	grid-column: 5/7;
 	grid-row: 5/7;
 	transform: rotate(315deg);
@@ -95,6 +115,7 @@
   }
   
   .deck {
+	position: relative;
 	border: 2px dashed #080808;
 	width: 160px;
 	height: 120px;
@@ -149,6 +170,7 @@
   }
   
   .space {
+	position: relative;
 	background: #fafaf8;
 	text-align: center;
   }

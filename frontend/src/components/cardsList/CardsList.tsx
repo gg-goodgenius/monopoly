@@ -4,7 +4,7 @@ import { useContext } from 'react'
 import { StateContext } from './../../context/State'
 
 function CardsList() {
-    const { myCards } = useContext(StateContext)
+    const { gameState, user } = useContext(StateContext)
     return (
         <div className="panel">
             <div className="header">
@@ -12,8 +12,8 @@ function CardsList() {
             </div>
             <div className="cards">
                 {
-                    myCards.map((card: any, index: number) => {
-                        return <CardItem key={index} {...card} />
+                    gameState?.fields &&  gameState?.fields.filter((e:any) => e?.owner?.index == user?.index ).map((card: any, index: number) => {
+                        return <CardItem key={card?.index} {...card} />
                     })
                 }
             </div>

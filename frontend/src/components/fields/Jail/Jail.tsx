@@ -1,7 +1,10 @@
-function JailField() {
+import UserLabel from "../UserLabel/UserLabel";
+
+function JailField(props:any) {
 
     return (
         <div className="space corner jail">
+			<UserLabel id={props.id} />
 			<div className="just">Just</div>
 			<div className="drawing">
 				<div className="container">

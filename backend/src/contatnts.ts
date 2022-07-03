@@ -91,121 +91,115 @@ export const fields: FieldState[] = [
     },
     {
         id: 11,
-        color: "orange",
-        name: "NEW YORK AVENUE",
-        price: 2,
-        type: 'object'
-    },
-    {
-        id: 12,
-        color: "orange",
-        name: "TENNESSEE AVENUE",
-        price: 1.8,
-        type: 'object'
-    },
-    {
-        id: 13,
-        name: 'COMMUNITY  CHEST',
-        type: 'chest'
-    },
-    {
-        id: 8,
-        color: "orange",
-        name: "ST. JAMES AVENUE",
-        price: 1.8,
-        type: 'object'
-    },
-    {
-        id: 14,
-        name: 'Railroad',
-        type: 'object',
-        color: 'black',
-        price: 2
-    },
-    {
-        id: 15,
-        color: "purple",
-        name: "VIRGINIA AVENUE",
-        price: 1.6,
-        type: 'object'
-    },
-    {
-        id: 16,
-        color: "purple",
-        name: "STATES AVENUE",
-        price: 1.4,
-        type: 'object'
-    },
-    {
-        id: 17,
-        name: 'electric company',
-        price: 1.5,
-        type: 'company'
-    },
-    {
-        id: 18,
         color: "purple",
         name: "ST. CHARLES PLACE",
         price: 1.4,
         type: 'object'
     },
     {
+        id: 12,
+        name: 'electric company',
+        price: 1.5,
+        type: 'company'
+    },
+    {
+        id: 13,
+        color: "purple",
+        name: "STATES AVENUE",
+        price: 1.4,
+        type: 'object'
+    },
+    {
+        id: 14,
+        color: "purple",
+        name: "VIRGINIA AVENUE",
+        price: 1.6,
+        type: 'object'
+    },
+    {
+        id: 15,
+        name: 'Railroad',
+        type: 'object',
+        color: 'black',
+        price: 2
+    },
+    {
+        id: 16,
+        color: "orange",
+        name: "ST. JAMES AVENUE",
+        price: 1.8,
+        type: 'object'
+        
+    },
+    {
+        id: 17,
+        name: 'COMMUNITY  CHEST',
+        type: 'chest'
+    },
+    {
+        id: 18,
+        color: "orange",
+        name: "TENNESSEE AVENUE",
+        price: 1.8,
+        type: 'object'
+    },
+    {
         id: 19,
+        color: "orange",
+        name: "NEW YORK AVENUE",
+        price: 2,
+        type: 'object'
+    },
+    {
+        id: 20,
         type: 'free_parking',
         name: 'FREE PARKING'
     },
     {
-        id: 20,
+        id: 21,
         color: "red",
         name: "KENTUCKY AVENUE",
         price: 2.2,
         type: 'object'
     },
     {
-        id: 21,
+        id: 22,
         name: 'CHANCE',
         type: 'chance'
     },
     {
-        id: 22,
+        id: 23,
         color: "red",
         name: "INDIANA AVENUE",
         price: 2.2,
         type: 'object'
     },
     {
-        id: 23,
+        id: 24,
         color: "red",
         name: "ILLINOIS AVENUE",
         price: 2,
         type: 'object'
     },
     {
-        id: 24,
+        id: 25,
         name: 'Railway',
         type: 'object',
         color: 'black',
         price: 2
     },
     {
-        id: 25,
+        id: 26,
         color: "yellow",
         name: "ATLANTIC AVENUE",
         price: 2.6,
         type: 'object'
     },
     {
-        id: 26,
+        id: 27,
         color: "yellow",
         name: "VENTNOR AVENUE",
         price: 2.6,
-        type: 'object'
-    },
-    {
-        id: 27,
-        color: "yellow",
-        name: "MARVIN GARDENS",
-        price: 2.8,
         type: 'object'
     },
     {
@@ -216,9 +210,9 @@ export const fields: FieldState[] = [
     },
     {
         id: 29,
-        color: "green",
-        name: "PACIFIC AVENUE",
-        price: 3,
+        color: "yellow",
+        name: "MARVIN GARDENS",
+        price: 2.8,
         type: 'object'
     },
     {
@@ -228,11 +222,12 @@ export const fields: FieldState[] = [
     },
     {
         id: 31,
-        type: 'object',
-        name: 'PACIFIC AVENUE',
+        color: "green",
+        name: "PACIFIC AVENUE",
         price: 3,
-        color: 'green'
+        type: 'object'
     },
+   
     {
         id: 32,
         color: "green",

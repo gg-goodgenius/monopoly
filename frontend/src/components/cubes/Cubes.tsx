@@ -3,16 +3,16 @@ import { useContext } from 'react'
 import { StateContext } from './../../context/State'
 
 function Cubes() {
-    const { cubes } = useContext(StateContext)
-
+    const { gameState } = useContext(StateContext)
+    
     return (
         <div className='panel'>
             <div className='header'>
                 Cubes
             </div>
-            {cubes &&
+            {gameState?.dice &&
                 <div className="cubes">
-                    {cubes[0]} - {cubes[1]}
+                    {gameState.dice[0]} - {gameState.dice[1]}
                 </div>}
 
         </div>

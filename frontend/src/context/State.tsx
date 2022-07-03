@@ -6,65 +6,15 @@ export const StateContext = createContext<any>(null);
 
 export const State = ({ children }: any) => {
     const [profile, setProfile] = useState<any>();
-    const [cubes, setCubes] = useState<any>();
-    const [listGamers, setListGamers] = useState<any>([
-        {
-            name: "0x00",
-            balance: "14",
-            active: false,
-            offers: [
-                {
-                    name: "BOARDWALK",
-                    color: 'dark-blue',
-                    price: 1,
-                },
-                {
-                    name: "MEDITER-RANEAN AVENUE",
-                    color: 'dark-purple',
-                    price: 1.4,
-                },
-            ]
-        },
-        {
-            name: "0x01",
-            balance: "1",
-            active: false
-        },
-        {
-            name: "0x02",
-            balance: "14",
-            active: true
-        },
-    ]);
-    const [myCards, setMyCards] = useState<any>([
-        {
-            name: "BOARDWALK",
-            level: 2,
-            color: 'dark-blue'
-        },
-        {
-            name: "MEDITER-RANEAN AVENUE",
-            level: 0,
-            color: 'dark-purple'
-        },
-        {
-            name: "BALTIC AVENUE",
-            level: 5,
-            color: 'dark-purple'
-        },
-        {
-            name: "PENNSYLVANIA AVENUE",
-            level: 3,
-            color: 'green'
-        },
-    ])
+    const [gameState, setGameState] = useState<any>();
     const [socket, setSocket] = useState<any>()
+    const [user, setUser] = useState<any>()
 
     useEffect(() => {
         const myprofile = async () => {
-            const data = await gameProfile()
-            setProfile(data)
-            const socket = io('ws://localhost:3000?address=' + data.address)
+            const dataProfile = await gameProfile()
+            setProfile(dataProfile)
+            const socket = io('ws://localhost:3000?address=' + dataProfile.address)
             socket.on("connect", () => {
                 console.log("TONOPOLY: Connect to server via socket", socket.id);
             })
@@ -77,13 +27,15 @@ export const State = ({ children }: any) => {
             })
             socket.on("updateGame", (data: any) => {
                 console.log("TONOPOLY: Update games state", data);
+                setGameState(data)
+                console.log(dataProfile.address);
+                
+                setUser(data?.users.find((e:any)=>e?.address==dataProfile?.address))
             })
             socket.on("error", (data: any) => {
                 console.error("TONOPOLY:", data);
             })
-
             setSocket(socket)
-            setCubes([0, 0])
         }
         myprofile();
 
@@ -94,14 +46,11 @@ export const State = ({ children }: any) => {
             value={{
                 profile,
                 setProfile,
-                cubes,
-                setCubes,
-                listGamers,
-                setListGamers,
-                myCards,
-                setMyCards,
+                gameState,
+                setGameState,
                 socket,
                 setSocket,
+                user
             }}
         >
             {children}

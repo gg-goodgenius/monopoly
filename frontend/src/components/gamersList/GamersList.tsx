@@ -5,7 +5,7 @@ import { StateContext } from './../../context/State'
 
 
 function GamersList() {
-    const { listGamers } = useContext(StateContext)
+    const { gameState } = useContext(StateContext)
     return (
         <div className="panel">
             <div className="header">
@@ -13,8 +13,8 @@ function GamersList() {
             </div>
             <div className="gamers">
                 {
-                    listGamers.map((gamer: any, index: number) => {
-                        return <GamerItem key={gamer.name} {...gamer}/>
+                    gameState?.users && gameState.users.map((gamer: any, index: number) => {
+                        return <GamerItem key={gamer.index} {...gamer}/>
                     })
                 }
             </div>
