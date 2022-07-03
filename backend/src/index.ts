@@ -8,6 +8,16 @@ import {Game, StatusGame, Step} from "./types/game";
 const app = express();
 const server = http.createServer(app);
 
+const TonWeb = require("tonweb");
+const tonweb = new TonWeb(new TonWeb.HttpProvider('https://testnet.toncenter.com/api/v2/jsonRPC', { apiKey: 'f307083da5685e519f09b08a98a9117a262e7d5d1f563fb517b6492c785cbba7' }))
+const seedA = TonWeb.utils.hexToBytes('08ac1bbb9f36301fbcf3ad9ba5fd0591b5aed398b972e6f2d0f6d5f698d3b05f')
+const keyPairA = tonweb.utils.keyPairFromSeed(seedA)
+const walletA = tonweb.wallet.create({
+  publicKey: keyPairA.publicKey
+});
+const toNano = TonWeb.utils.toNano;
+const BN = TonWeb.utils.BN;
+
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
     cors: {
         origin: "*",
@@ -89,6 +99,43 @@ io.on('connection', async (socket) => {
             game.status = StatusGame.PROCESS;
             game.users[0].currentStep = true;
             io.to('game').emit('updateGame', game);
+
+            for (const user of game.users) {
+              const channelInitState = {
+                  balanceA: toNano('15'),
+                  balanceB: toNano('15'),
+                  seqnoA: new BN(0),
+                  seqnoB: new BN(0)
+              }
+              const walletB = tonweb.wallet.create({
+                  publicKey: user.publicKey
+              });
+              const channelConfig = {
+                  channelId: new BN(generateRandomInteger(0, 10000)),
+                  addressA: await walletA.getAddress(),
+                  addressB: await walletB.getAddress(),
+                  initBalanceA: channelInitState.balanceA,
+                  initBalanceB: channelInitState.balanceB
+              }
+              const channelA = tonweb.payments.createChannel({
+                  ...channelConfig,
+                  isA: true,
+                  myKeyPair: keyPairA,
+                  hisPublicKey: user.publicKey,
+              });
+              const fromWalletA = channelA.fromWallet({
+                  wallet: walletA,
+                  secretKey: keyPairA.secretKey
+              })
+              await fromWalletA.deploy().send(toNano('0.05'))
+
+              //sleep
+
+              await fromWalletA
+                  .topUp({ coinsA: channelInitState.balanceA, coinsB: new BN(0) })
+                  .send(channelInitState.balanceA.add(toNano('0.05')))
+            }
+            
         } else
             return socket.emit('error', 'Very few people')
     })
