@@ -15,7 +15,7 @@ export const State = ({ children }: any) => {
         const myprofile = async () => {
             const dataProfile = await gameProfile()
             setProfile(dataProfile)
-            const socket = io('ws://localhost:3000?address=' + dataProfile.address + '&publicKey='+dataProfile.keys.publicKey)
+            const socket = io('ws://localhost:3000?address=' + dataProfile.address + '&publicKey=' + dataProfile.keys.publicKey)
             socket.on("connect", () => {
                 console.log("TONOPOLY: Connect to server via socket", socket.id);
             })
@@ -29,7 +29,7 @@ export const State = ({ children }: any) => {
                 console.log("TONOPOLY: Update games state", data);
                 setGameState(data)
                 console.log(dataProfile.address);
-                setUser(data?.users.find((e:any)=>e?.address==dataProfile?.address))
+                setUser(data?.users.find((e: any) => e?.address == dataProfile?.address))
             })
             socket.on("error", (data: any) => {
                 console.error("TONOPOLY:", data);
@@ -44,7 +44,7 @@ export const State = ({ children }: any) => {
                     const signState = await payment.channel.signState(data)
                     return signState
                 }
-                console.log("TONOPOLY: sign state",sign());
+                console.log("TONOPOLY: sign state", sign());
             })
 
             socket.on("initChannel", (data: any) => {
@@ -58,15 +58,15 @@ export const State = ({ children }: any) => {
                 const addressBank = data.address;
 
                 const channelInitState = {
-                    balanceA: toNano('15'), 
-                    balanceB: toNano('15'), 
-                    seqnoA: new BN(0), 
-                    seqnoB: new BN(0) 
+                    balanceA: toNano('15'),
+                    balanceB: toNano('15'),
+                    seqnoA: new BN(0),
+                    seqnoB: new BN(0)
                 };
                 const channelConfig = {
-                    channelId: new BN(channelId), 
-                    addressA: profile.address, 
-                    addressB: addressBank, 
+                    channelId: new BN(channelId),
+                    addressA: profile.address,
+                    addressB: addressBank,
                     initBalanceA: channelInitState.balanceA,
                     initBalanceB: channelInitState.balanceB
                 }
@@ -82,7 +82,14 @@ export const State = ({ children }: any) => {
                     secretKey: profile.keys.secretKey
                 })
 
-                setPayment({channel, fromWallet})
+                const updateBalance = async () => {
+                    await fromWallet
+                        .topUp({ coinsA: new BN(0), coinsB: channelInitState.balanceB })
+                        .send(channelInitState.balanceB.add(toNano('0.05')));
+
+                }
+                updateBalance()
+                setPayment({ channel, fromWallet })
             }
             )
             setSocket(socket)
