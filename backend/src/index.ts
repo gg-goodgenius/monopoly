@@ -8,7 +8,7 @@ import {Game, StatusGame, Step} from "./types/game";
 const app = express();
 const server = http.createServer(app);
 
-const sleep = (millis) => new Promise(resolve => setTimeout(resolve, millis))
+const sleep = (millis: number) => new Promise(resolve => setTimeout(resolve, millis))
 
 const TonWeb = require("tonweb");
 const tonweb = new TonWeb(new TonWeb.HttpProvider('https://testnet.toncenter.com/api/v2/jsonRPC', { apiKey: 'f307083da5685e519f09b08a98a9117a262e7d5d1f563fb517b6492c785cbba7' }))
@@ -49,6 +49,7 @@ let countOnline = 0;
 
 io.on('connection', async (socket) => {
     const address = socket.handshake.query.address as string;
+    const userPublicKey = socket.handshake.query.publicKey as string;
     if (!address)
         return socket.disconnect(true);
 
@@ -88,7 +89,8 @@ io.on('connection', async (socket) => {
                 balance: 15,
                 positionFieldId: 0,
                 color: '#' + randomColor,
-                currentStep: false
+                currentStep: false,
+                publicKey: userPublicKey
             });
             socket.join('game');
             io.to('game').emit('updateGame', game);

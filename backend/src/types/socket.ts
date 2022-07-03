@@ -4,7 +4,8 @@ export interface ServerToClientEvents {
     updateCurrentOnline: (countOnline: number) => void
     error: (msg: string) => void
     updateGame: (game: Game) => void
-    changeBalance: (diff: number) => void
+    changeBalance: (diff: number) => void,
+    updateChannel: ({} : {channelId: number, publicKey: string, address: string }) => void
 }
 
 export interface ClientToServerEvents {
