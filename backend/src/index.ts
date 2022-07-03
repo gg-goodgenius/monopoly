@@ -153,12 +153,31 @@ io.on('connection', async (socket) => {
                 const field = game.fields[id]
                 if (!field) return socket.emit('error', 'filed not found');
                 if(field.type === 'object') {
-                    if(field.owner?.index) {
-
+                    if(field.owner?.index === step.user.index) {
+                        game.users[step.user.index].balance += field.price*0.5;
+                        socket.emit('changeBalance', field.price*0.5);
+                        field.owner = undefined;
+                        io.to('game').emit('updateGame', game);
                     }
                 }
             }
             break;
+
+            // case 'upgrade': {
+            //     if (!id) return socket.emit('error', 'id not found');
+            //     const field = game.fields[id]
+            //     if (!field) return socket.emit('error', 'filed not found');
+            //     if(field.type === 'object') {
+            //         if(field.owner?.index === step.user.index) {
+            //             if(field.price * 0.25 <= game.users[step.user.index].balance) {
+            //                 field.level += 1;
+            //                 game.users[step.user.index].balance -= field.price * 0.25;
+            //             }
+            //         }
+            //     }
+            // }
+            // break;
+
 
             case "payRent":
                 const cField = game.fields[game.users[step.user.index].positionFieldId];

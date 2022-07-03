@@ -13,6 +13,6 @@ export interface ClientToServerEvents {
     startGame: () => void,
     finishGame: () => void,
     startStep: () => void,
-    doActionStep: (type: 'buy' | 'offer' | 'sell' | 'payRent', id?: number) => void,
+    doActionStep: (type: 'buy' | 'upgrade' | 'sell' | 'payRent', id?: number) => void,
     finishStep: () => void
 }
