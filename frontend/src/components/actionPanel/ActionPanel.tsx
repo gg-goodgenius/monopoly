@@ -26,6 +26,10 @@ function ActionPanel(props: any) {
     const handleRollCubes = () => {
         socket.emit("doActionStep", "rollCubes")
     }
+    
+    const handlePayRent = () => {
+        socket.emit("doActionStep", "payRent")
+    }
 
     const handleFinish = () => {
         socket.emit("finishStep")
@@ -44,6 +48,7 @@ function ActionPanel(props: any) {
                 <><Button name='Join Game' onClick={handleJoin} /><br/></>
             }
             <Button name='Roll cubes' onClick={handleRollCubes} /><br/>
+            <Button name='Pay rent' onClick={handlePayRent} /><br/>
             <Button name='Finish' onClick={handleFinish} /><br/>
 
             {visibleQRLink && profile &&
