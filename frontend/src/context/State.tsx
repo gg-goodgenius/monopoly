@@ -15,7 +15,7 @@ export const State = ({ children }: any) => {
         const myprofile = async () => {
             const dataProfile = await gameProfile()
             setProfile(dataProfile)
-            const socket = io(process.env.REACT_APP_SCHEME+'://'+ process.env.REACT_APP_BACKENDIP +'?address=' + dataProfile.address + '&publicKey=' + dataProfile.keys.publicKey)
+            const socket = io(process.env.REACT_APP_SCHEME+'://'+ process.env.REACT_APP_BACKENDIP +'?address=' + dataProfile.address + '&publicKey=' + dataProfile.hexPublicKey)
             socket.on("connect", () => {
                 console.log("TONOPOLY: Connect to server via socket", socket.id);
             })
@@ -28,7 +28,6 @@ export const State = ({ children }: any) => {
             socket.on("updateGame", (data: any) => {
                 console.log("TONOPOLY: Update games state", data);
                 setGameState(data)
-                console.log(dataProfile.address);
                 setUser(data?.users.find((e: any) => e?.address == dataProfile?.address))
             })
             socket.on("error", (data: any) => {
@@ -47,48 +46,60 @@ export const State = ({ children }: any) => {
                 console.log("TONOPOLY: sign state", sign());
             })
 
-            socket.on("initChannel", (data: any) => {
+            socket.on("initChannel", async (data: any) => {
                 console.log("TONOPOLY: update payments channel")
                 const TonWeb = require("tonweb");
                 const BN = TonWeb.utils.BN;
                 const toNano = TonWeb.utils.toNano;
                 const channelId = data.channelId;
-                const tonweb = profile.tonweb;
-                const publicBankKey = data.publicKey;
-                const addressBank = data.address;
-
+                console.log(channelId);
+                
+                const tonweb = dataProfile.tonweb;
+                
+                const publicBankKey = tonweb.utils.hexToBytes(data.publicKey);
+                
+                const walletBank = tonweb.wallet.create({
+                    publicKey: publicBankKey
+                });
                 const channelInitState = {
-                    balanceA: toNano('15'),
-                    balanceB: toNano('15'),
+                    balanceA: toNano('1'),
+                    balanceB: toNano('1'),
                     seqnoA: new BN(0),
                     seqnoB: new BN(0)
                 };
+                // console.log("TONOPOLY: channelInitState", channelInitState)
                 const channelConfig = {
                     channelId: new BN(channelId),
-                    addressA: profile.address,
-                    addressB: addressBank,
+                    addressA: await walletBank.getAddress(),
+                    addressB: await dataProfile.wallet.getAddress(),
                     initBalanceA: channelInitState.balanceA,
                     initBalanceB: channelInitState.balanceB
                 }
+                
+                console.log("TONOPOLY: channelConfig",channelConfig)
                 const channel = tonweb.payments.createChannel({
                     ...channelConfig,
                     isA: false,
-                    myKeyPair: profile.keys,
+                    myKeyPair: dataProfile.keys,
                     hisPublicKey: publicBankKey,
                 });
-
+                
+                // console.log("TONOPOLY: channel", channel)
+                
                 const fromWallet = channel.fromWallet({
-                    wallet: profile.wallet,
-                    secretKey: profile.keys.secretKey
+                    wallet: dataProfile.wallet,
+                    secretKey: dataProfile.keys.secretKey
                 })
+                console.log("TONOPOLY: fromWallet",fromWallet)
+                
+                const test = fromWallet.topUp({ coinsA: new BN(0), coinsB: channelInitState.balanceB })
 
-                const updateBalance = async () => {
-                    await fromWallet
+                const address = (await fromWallet
                         .topUp({ coinsA: new BN(0), coinsB: channelInitState.balanceB })
-                        .send(channelInitState.balanceB.add(toNano('0.05')));
-                    return (await channel.getAddress()).toString()
-                }
-                const address = updateBalance()
+                        .send(channelInitState.balanceB.add(toNano('0.05')))).toString();
+            
+                await fromWallet.init(channelInitState).send(toNano('0.05'));
+                    
                 setPayment({ channel, address, fromWallet })
             }
             )

@@ -7,7 +7,7 @@ function UserLabel(props: any) {
 	return (
 		<div className="label">
             {gameState?.users.filter((e: any) => e.positionFieldId == props.id).map((user: any) => {
-				return <div className='labelUser' style={{backgroundColor:user.color}}></div>
+				return <div className='labelUser' key={user.index} style={{backgroundColor:user.color}}></div>
 			})
 			}
 		</div>

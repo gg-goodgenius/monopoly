@@ -1,9 +1,9 @@
 import express from 'express';
 import http from 'http';
-import {Server} from "socket.io";
-import {fields} from "./contatnts";
-import {ClientToServerEvents, ServerToClientEvents} from "./types/socket";
-import {Game, StatusGame, Step} from "./types/game";
+import { Server } from "socket.io";
+import { fields } from "./contatnts";
+import { ClientToServerEvents, ServerToClientEvents } from "./types/socket";
+import { Game, StatusGame, Step } from "./types/game";
 
 const app = express();
 const server = http.createServer(app);
@@ -15,7 +15,7 @@ const tonweb = new TonWeb(new TonWeb.HttpProvider('https://testnet.toncenter.com
 const seedA = TonWeb.utils.hexToBytes('08ac1bbb9f36301fbcf3ad9ba5fd0591b5aed398b972e6f2d0f6d5f698d3b05f')
 const keyPairA = tonweb.utils.keyPairFromSeed(seedA)
 const walletA = tonweb.wallet.create({
-  publicKey: keyPairA.publicKey
+    publicKey: keyPairA.publicKey
 });
 const toNano = TonWeb.utils.toNano;
 const BN = TonWeb.utils.BN;
@@ -81,7 +81,8 @@ io.on('connection', async (socket) => {
     socket.on('joinGame', async () => {
         if (game.status === StatusGame.PROCESS) return socket.emit('error', 'The game has already started.');
         if (game.users.findIndex(u => u.address == address) === -1) {
-            const randomColor = Math.floor(Math.random()*16777215).toString(16);
+            const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+            const hexPublicKey = tonweb.utils.hexToBytes(userPublicKey)
             game.users.push({
                 index: game.users.length,
                 address: address,
@@ -90,7 +91,7 @@ io.on('connection', async (socket) => {
                 positionFieldId: 0,
                 color: '#' + randomColor,
                 currentStep: false,
-                publicKey: userPublicKey
+                publicKey: hexPublicKey
             });
             socket.join('game');
             io.to('game').emit('updateGame', game);
@@ -99,90 +100,109 @@ io.on('connection', async (socket) => {
 
     socket.on('startGame', async () => {
         if (game.status === StatusGame.PROCESS) return socket.emit('error', 'Game started yet');
-        if (game.users.length > 1) {
+        if (game.users.length >= 1) {
             game.status = StatusGame.PROCESS;
             game.users[0].currentStep = true;
             io.to('game').emit('updateGame', game);
-            
+
             for (const user of game.users) {
-              const channelInitState = {
-                  balanceA: toNano('15'),
-                  balanceB: toNano('15'),
-                  seqnoA: new BN(0),
-                  seqnoB: new BN(0)
-              }
-              const walletB = tonweb.wallet.create({
-                  publicKey: user.publicKey
-              });
-              const channelConfig = {
-                  channelId: new BN(generateRandomInteger(0, 10000)),
-                  addressA: await walletA.getAddress(),
-                  addressB: await walletB.getAddress(),
-                  initBalanceA: channelInitState.balanceA,
-                  initBalanceB: channelInitState.balanceB
-              }
+                const channelInitState = {
+                    balanceA: toNano('1'),
+                    balanceB: toNano('1'),
+                    seqnoA: new BN(0),
+                    seqnoB: new BN(0)
+                }
+                // console.log("TONOPOLY: channelInitState", channelInitState)
+                const walletB = tonweb.wallet.create({
+                    publicKey: user.publicKey
+                });
+                const decChannelId = generateRandomInteger(0, 100)
+                const channelConfig = {
+                    channelId: new BN(decChannelId),
+                    addressA: await walletA.getAddress(),
+                    addressB: await walletB.getAddress(),
+                    initBalanceA: channelInitState.balanceA,
+                    initBalanceB: channelInitState.balanceB
+                }
 
-              const channelA = tonweb.payments.createChannel({
-                  ...channelConfig,
-                  isA: true,
-                  myKeyPair: keyPairA,
-                  hisPublicKey: user.publicKey,
-              });
-              const fromWalletA = channelA.fromWallet({
-                  wallet: walletA,
-                  secretKey: keyPairA.secretKey
-              })
-              await fromWalletA.deploy().send(toNano('0.05'))
-              
-              await sleep(6000)
+                // console.log("TONOPOLY: channelConfig",channelConfig)
+                const channelA = tonweb.payments.createChannel({
+                    ...channelConfig,
+                    isA: true,
+                    myKeyPair: keyPairA,
+                    hisPublicKey: user.publicKey,
+                });
+                // console.log("TONOPOLY: channel", channelA)
 
-              socket.emit('initChannel', {
-                channelId: channelConfig.channelId,
-                publicKey: keyPairA.publicKey,
-                address: await walletA.getAddress()
-              })
+                const fromWalletA = channelA.fromWallet({
+                    wallet: walletA,
+                    secretKey: keyPairA.secretKey
+                })
+                // console.log("TONOPOLY: fromWallet",fromWalletA)
+                await fromWalletA.deploy().send(toNano('0.05'))
+                console.log("ADDRESS BANK:", (await walletA.getAddress()).toString());
+                const walletBank = tonweb.wallet.create({
+                    publicKey: keyPairA.publicKey
+                });
+                const hexPublicKey = tonweb.utils.bytesToHex(keyPairA.publicKey)
 
-              await fromWalletA
-                  .topUp({ coinsA: channelInitState.balanceA, coinsB: new BN(0) })
-                  .send(channelInitState.balanceA.add(toNano('0.05')))
+
+
+                await sleep(7000)
+                console.log(await channelA.getChannelState());
+                const data = await channelA.getData();
+                console.log('balanceA = ', data.balanceA.toString())
+                console.log('balanceB = ', data.balanceB.toString())
+                const channelAddress = await channelA.getAddress(); // address of this payment channel smart-contract in blockchain
+                console.log('channelAddress=', channelAddress.toString(true, true, true));
+
+                socket.emit('initChannel', {
+                    channelId: decChannelId,
+                    publicKey: hexPublicKey,
+                    address: await walletA.getAddress()
+                })
+
+                await fromWalletA
+                    .topUp({ coinsA: channelInitState.balanceA, coinsB: new BN(0) })
+                    .send(channelInitState.balanceA.add(toNano('0.05')))
             }
         } else
             return socket.emit('error', 'Very few people')
     })
 
     socket.on('finishGame', () => {
-       step = null;
-       game = {
-           fields: fields,
-           users: [],
-           bank: {
-               address: ''
-           },
-           status: StatusGame.WAITING,
-           dice: [0, 0]
-       };
-       io.socketsLeave('game');
+        step = null;
+        game = {
+            fields: fields,
+            users: [],
+            bank: {
+                address: ''
+            },
+            status: StatusGame.WAITING,
+            dice: [0, 0]
+        };
+        io.socketsLeave('game');
     });
 
     socket.on('startStep', () => {
         if (game.status === StatusGame.WAITING) return socket.emit('error', 'Game not started yet');
         if (step) return socket.emit('error', 'Step already started')
-            const user = game.users.find(u => u.currentStep);
-            if (user?.socketId === socket.id) {
-                step = {
-                    user: user,
-                    countActions: 0
-                }
-                game.dice[0] = generateRandomInteger(1, 6);
-                game.dice[1] = generateRandomInteger(1, 6);
-                const randomVal = game.dice[0] + game.dice[1]
-                if ((game.users[user.index].positionFieldId + randomVal) > 39) {
-                    game.users[user.index].positionFieldId += (game.users[user.index].positionFieldId + randomVal) - 40;
-                } else
-                    game.users[user.index].positionFieldId += randomVal;
-                io.to('game').emit('updateGame', game);
+        const user = game.users.find(u => u.currentStep);
+        if (user?.socketId === socket.id) {
+            step = {
+                user: user,
+                countActions: 0
             }
-    
+            game.dice[0] = generateRandomInteger(1, 6);
+            game.dice[1] = generateRandomInteger(1, 6);
+            const randomVal = game.dice[0] + game.dice[1]
+            if ((game.users[user.index].positionFieldId + randomVal) > 39) {
+                game.users[user.index].positionFieldId += (game.users[user.index].positionFieldId + randomVal) - 40;
+            } else
+                game.users[user.index].positionFieldId += randomVal;
+            io.to('game').emit('updateGame', game);
+        }
+
     });
 
     socket.on('doActionStep', (type, id) => {
@@ -195,30 +215,40 @@ io.on('connection', async (socket) => {
                 if (field.type === 'object') {
                     if (!field.owner) {
                         if (field.price <= step.user.balance) {
-                            field.owner = {index: step.user.index};
+                            field.owner = { index: step.user.index };
                             step.user.balance -= field.price;
+                            const channelState = {
+                                balanceA: toNano(),
+                                balanceB: toNano(step.user.balance.toString()),
+                                seqnoA: new BN(0),
+                                seqnoB: new BN(1)
+                            };
                             socket.emit('changeBalance', -field.price);
                             io.to('game').emit('updateGame', game);
                         } else return socket.emit('error', 'Money is tight');
                     } else return socket.emit('error', 'Field already purchased')
                 }
+
+                
+
+
             }
-            break;
+                break;
 
             case "sell": {
                 if (!id) return socket.emit('error', 'id not found');
                 const field = game.fields[id]
                 if (!field) return socket.emit('error', 'filed not found');
-                if(field.type === 'object') {
-                    if(field.owner?.index === step.user.index) {
-                        game.users[step.user.index].balance += field.price*0.5;
-                        socket.emit('changeBalance', field.price*0.5);
+                if (field.type === 'object') {
+                    if (field.owner?.index === step.user.index) {
+                        game.users[step.user.index].balance += field.price * 0.5;
+                        socket.emit('changeBalance', field.price * 0.5);
                         field.owner = undefined;
                         io.to('game').emit('updateGame', game);
                     }
                 }
             }
-            break;
+                break;
 
             // case 'upgrade': {
             //     if (!id) return socket.emit('error', 'id not found');
@@ -258,7 +288,7 @@ io.on('connection', async (socket) => {
         if (game.status === StatusGame.WAITING) return socket.emit('error', 'Game not started yet');
         if (step?.user) {
             if (step.user.socketId === socket.id) {
-                if(game.users[step?.user.index + 1] ) {
+                if (game.users[step?.user.index + 1]) {
                     game.users[step?.user.index].currentStep = false;
                     game.users[step?.user.index + 1].currentStep = true;
                 } else {

@@ -24,7 +24,6 @@ interface objectType {
 
 function Board() {
 	const { gameState } = useContext(StateContext)
-	console.log(gameState);
 
 	return (
 		<>
