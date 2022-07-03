@@ -19,7 +19,7 @@ const walletA = tonweb.wallet.create({
 });
 const toNano = TonWeb.utils.toNano;
 const BN = TonWeb.utils.BN;
-
+const STARTBALANCE = 1
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
     cors: {
         origin: "*",
@@ -107,8 +107,8 @@ io.on('connection', async (socket) => {
 
             for (const user of game.users) {
                 const channelInitState = {
-                    balanceA: toNano('1'),
-                    balanceB: toNano('1'),
+                    balanceA: toNano(STARTBALANCE.toString()),
+                    balanceB: toNano(STARTBALANCE.toString()),
                     seqnoA: new BN(0),
                     seqnoB: new BN(0)
                 }
@@ -155,6 +155,15 @@ io.on('connection', async (socket) => {
                 console.log('balanceB = ', data.balanceB.toString())
                 const channelAddress = await channelA.getAddress(); // address of this payment channel smart-contract in blockchain
                 console.log('channelAddress=', channelAddress.toString(true, true, true));
+                console.log("BALANCE DATA:", data);
+                
+                user.channel = {
+                    balanceA: STARTBALANCE,
+                    balanceB: STARTBALANCE,
+                    seqnoA: 0,
+                    seqnoB: 0,
+                    obj: channelA
+                }
 
                 socket.emit('initChannel', {
                     channelId: decChannelId,
@@ -171,6 +180,7 @@ io.on('connection', async (socket) => {
     })
 
     socket.on('finishGame', () => {
+
         step = null;
         game = {
             fields: fields,
@@ -193,8 +203,8 @@ io.on('connection', async (socket) => {
                 user: user,
                 countActions: 0
             }
-            game.dice[0] = generateRandomInteger(1, 6);
-            game.dice[1] = generateRandomInteger(1, 6);
+            game.dice[0] = 2//generateRandomInteger(1, 6);
+            game.dice[1] = 4//generateRandomInteger(1, 6);
             const randomVal = game.dice[0] + game.dice[1]
             if ((game.users[user.index].positionFieldId + randomVal) > 39) {
                 game.users[user.index].positionFieldId += (game.users[user.index].positionFieldId + randomVal) - 40;
@@ -205,7 +215,7 @@ io.on('connection', async (socket) => {
 
     });
 
-    socket.on('doActionStep', (type, id) => {
+    socket.on('doActionStep', async (type, id) => {
         // const user = game.users.find(u => u.address === address);
         if (game.status === StatusGame.WAITING) return socket.emit('error', 'Game not started yet');
         if (!step) return socket.emit('error', 'Step not already started yet');
@@ -216,22 +226,27 @@ io.on('connection', async (socket) => {
                     if (!field.owner) {
                         if (field.price <= step.user.balance) {
                             field.owner = { index: step.user.index };
+                            console.log(step.user.channel);
                             step.user.balance -= field.price;
+                            step.user.channel.balanceA += field.price
+                            step.user.channel.balanceB -= field.price
+                            step.user.channel.seqnoB += 1
+                            console.log(step.user.channel);
+                            
                             const channelState = {
-                                balanceA: toNano(),
-                                balanceB: toNano(step.user.balance.toString()),
-                                seqnoA: new BN(0),
-                                seqnoB: new BN(1)
+                                balanceA: toNano(step.user.channel.balanceA.toString()),
+                                balanceB: toNano(step.user.channel.balanceB.toString()),
+                                seqnoA: new BN(step.user.channel.seqnoA ),
+                                seqnoB: new BN(step.user.channel.seqnoB )
                             };
-                            socket.emit('changeBalance', -field.price);
+                            const signatureA = await step.user.channel.obj.signState(channelState)
+                            console.log(signatureA);
+                            
+                            socket.emit('changeBalance', channelState);
                             io.to('game').emit('updateGame', game);
                         } else return socket.emit('error', 'Money is tight');
                     } else return socket.emit('error', 'Field already purchased')
                 }
-
-                
-
-
             }
                 break;
 

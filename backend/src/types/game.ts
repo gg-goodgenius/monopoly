@@ -23,6 +23,7 @@ export interface Gamer {
     color: string,
     currentStep: boolean,
     publicKey: string,
+    channel?: any,
 }
 
 export interface Step {

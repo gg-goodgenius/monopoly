@@ -12,7 +12,7 @@ export interface ServerToClientEvents {
     updateCurrentOnline: (countOnline: number) => void
     error: (msg: string) => void
     updateGame: (game: Game) => void
-    changeBalance: (diff: number) => void,
+    changeBalance: (diff: any) => void,
     initChannel: ({} : {channelId: number, publicKey: string, address: string }) => void,
     updateStateChannel: ({}: {balanceA: number, }) => void
 }

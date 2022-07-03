@@ -35,6 +35,7 @@ export const State = ({ children }: any) => {
             })
             socket.on("changeBalance", (data: any) => {
                 console.log("TONOPOLY: change balance", data);
+
             })
 
             socket.on("updateStateChannel", (data: any) => {
@@ -99,9 +100,9 @@ export const State = ({ children }: any) => {
                         .send(channelInitState.balanceB.add(toNano('0.05')))).toString();
             
                 await fromWallet.init(channelInitState).send(toNano('0.05'));
-                    
+                console.log("ADDRESS", address);
                 setPayment({ channel, address, fromWallet })
-            }
+                }
             )
             setSocket(socket)
         }
